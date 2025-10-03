@@ -88,3 +88,5 @@ geckodriver
 *.backup
 *.bak
 *.tmp
+
+test_db.py

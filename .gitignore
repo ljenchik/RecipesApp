@@ -90,3 +90,4 @@ geckodriver
 *.tmp
 
 test_db.py
+curls

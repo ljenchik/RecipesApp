@@ -4,8 +4,10 @@ from models.models import db
 from db.db_config import DB_CONFIG
 
 # Import blueprints
-from routes.recipes import recipes_bp
 from routes.test_db import test_db_connection
+from routes.recipes import recipes_bp
+from routes.users import users_bp
+
 
 app = Flask(__name__)
 CORS(app)
@@ -20,6 +22,7 @@ db.init_app(app)
 # Register blueprints
 app.register_blueprint(test_db_connection, url_prefix='/test-db')
 app.register_blueprint(recipes_bp, url_prefix='/recipes')
+app.register_blueprint(users_bp, url_prefix='/users')
 
 
 if __name__ == '__main__':

@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 from recipe_scrapers import scrape_html
 import requests
 from bs4 import BeautifulSoup
-from models.models import db, Recipe, User
+from models.models import db, Recipe
 import json
 
 recipes_bp = Blueprint('recipes', __name__)

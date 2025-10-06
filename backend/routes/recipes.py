@@ -74,7 +74,7 @@ def generic_parse(html, url):
     print(f"⚠ Limited data from HTML: {recipe_data['title']}")
     return recipe_data
 
-# Parse recipe from URL
+# Parse recipe from URL ************ need improvements *************** does not parse correctly
 @recipes_bp.route('/parse', methods=['POST'])
 def parse_recipe():
     try:
@@ -125,12 +125,17 @@ def parse_recipe():
 @recipes_bp.route('/', methods=['GET'])
 def get_recipes():
     try:
-        user_id = request.args.get('userId', 1)
-        recipes = Recipe.query.filter_by(user_id=user_id).order_by(Recipe.created_at.desc()).all()
+        user_id = request.args.get('userId', type=int)
+        query = Recipe.query.order_by(Recipe.created_at.desc())
         
+        if user_id:
+            query = query.filter_by(user_id=user_id)
+        
+        recipes = query.limit(10).all()
+
         print(f"✓ Found {len(recipes)} recipes")
         return jsonify([recipe.to_dict() for recipe in recipes]), 200
-        
+
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

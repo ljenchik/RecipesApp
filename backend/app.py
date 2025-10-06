@@ -24,7 +24,6 @@ app.register_blueprint(test_db_connection, url_prefix='/test-db')
 app.register_blueprint(recipes_bp, url_prefix='/recipes')
 app.register_blueprint(users_bp, url_prefix='/users')
 
-
 if __name__ == '__main__':
     print("🚀 Starting Recipes App on http://localhost:5000")
     app.run(debug=True, port=5000)

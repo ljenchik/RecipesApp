@@ -1,4 +1,3 @@
-# routes/recipes.py
 from flask import Blueprint, request, jsonify
 from recipe_scrapers import scrape_html
 import requests

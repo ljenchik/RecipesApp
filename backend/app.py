@@ -1,7 +1,7 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 from models.models import db
-from db_config import DB_CONFIG
+from db.db_config import DB_CONFIG
 
 # Import blueprints
 from routes.recipes import recipes_bp

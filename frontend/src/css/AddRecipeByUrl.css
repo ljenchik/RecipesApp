@@ -1,0 +1,30 @@
+/* Add recipe field */
+.add-recipe input {
+    width: 30%;
+    padding: 10px;
+    border-radius: 6px;
+    margin: 1rem 0 1rem 1rem;
+    border: 1.5px solid var(--main-border-color); /* thin default */
+    outline: none;
+    transition: border-color 0.18s ease, border-width 0.18s ease;
+}
+
+.add-recipe input:focus {
+    border-width: 2.5px; /* thicker */
+    border-color: var(--secondary-border-color); /* purple */
+}
+
+.add-recipe input:valid:focus {
+    border-color: var(--secondary-border-color); /* purple if valid */
+}
+
+.add-recipe button {
+    background-color: var(--background-color);
+    color: var(--main-text-color);
+}
+
+.add-recipe button:hover {
+    background-color: var(--background-color);
+    font-size: medium;
+    font-weight: bolder;
+}

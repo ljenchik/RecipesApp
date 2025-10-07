@@ -1,7 +1,16 @@
 import { useState, useEffect } from "react";
+
+// Components
 import RecipeCard from "./RecipeCard";
-import "../css/RecipeCard.css";
 import AddRecipeByUrl from "./AddRecipeByUrl";
+
+// CSS
+import "../css/HomePage.css";
+import "../css/RecipeCard.css";
+import "../css/AddRecipeByUrl.css";
+
+// Assets
+import icon from "../assets/recipes-app-icon.svg";
 
 function HomePage() {
     const [recipes, setRecipes] = useState([]);
@@ -23,7 +32,17 @@ function HomePage() {
     return (
         <div>
             <header>
-                <h1>RecipesApp</h1>
+                <div className="title-app">
+                    <img
+                        src={icon}
+                        alt="Recipes App Icon"
+                        style={{
+                            width: "40px",
+                            height: "40px",
+                        }}
+                    />
+                    <h1>RecipesApp</h1>
+                </div>
                 <AddRecipeByUrl onRecipeAdded={fetchRecipes} />
             </header>
 

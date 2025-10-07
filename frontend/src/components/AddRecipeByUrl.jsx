@@ -10,7 +10,7 @@ function AddRecipeByUrl({ onRecipeAdded }) {
         setError("");
 
         if (!url) {
-            setError("Please enter a URL.");
+            setError("Please enter a URL");
             return;
         }
 
@@ -29,7 +29,7 @@ function AddRecipeByUrl({ onRecipeAdded }) {
 
             const newRecipe = await res.json();
             setUrl("");
-            if (onRecipeAdded) onRecipeAdded(newRecipe); // notify parent to refresh list
+            if (onRecipeAdded) onRecipeAdded(newRecipe);
         } catch (err) {
             console.error(err);
             setError(err.message);
@@ -43,13 +43,13 @@ function AddRecipeByUrl({ onRecipeAdded }) {
             <form onSubmit={handleSubmit}>
                 <input
                     type="url"
-                    placeholder="Paste recipe URL here..."
+                    placeholder="Paste recipe link here..."
                     value={url}
                     onChange={(e) => setUrl(e.target.value)}
                     required
                 />
                 <button type="submit" disabled={loading}>
-                    {loading ? "Adding..." : "Add Recipe"}
+                    {loading ? "Adding..." : "Add recipe"}
                 </button>
             </form>
             {error && <p style={{ color: "red" }}>{error}</p>}

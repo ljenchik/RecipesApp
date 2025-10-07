@@ -1,0 +1,83 @@
+:root {
+    --main-text-color: #4b044d;
+    --main-border-color: #4b044d;
+    --secondary-border-color: #6d0770c8;
+    --background-color: #fbf5f5e0;
+    --heading-color: #4b044d;
+    --font-family-base: "Arial", "Helvetica", sans-serif;
+    --default-padding: 0;
+    --default-margin: 0;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family-base);
+    color: var(--main-text-color);
+    background-color: var(--background-color);
+    margin: var(--default-margin);
+    padding: var(--default-padding);
+}
+
+/* Headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-family-heading);
+    color: var(--heading-color);
+    margin: 0.5em 0;
+    padding: 0;
+}
+
+/* Paragraphs */
+p {
+    margin: 0.5em 0;
+    padding: 0;
+}
+
+/* Lists */
+ul,
+ol {
+    margin: 0.5em 0 0.5em 1.5em;
+    padding: 0;
+}
+
+/* Buttons, inputs, links */
+button,
+input,
+textarea,
+select {
+    margin: 0;
+    padding: 0.5em 1em;
+    font-family: var(--font-family-base);
+}
+
+/* Container for multiple recipe cards */
+.recipes-container {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: 1rem;
+    gap: 1rem;
+    justify-content: flex-start;
+}
+
+/* Title app */
+.title-app {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 1rem;
+    margin-left: 1rem;
+}
+
+.title-app h1 {
+    margin: 0;
+    font-size: 24pt;
+    color: var(--main-text-color);
+    font-family: var(--font-family-base);
+}

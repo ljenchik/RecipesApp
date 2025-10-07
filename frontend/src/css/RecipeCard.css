@@ -10,6 +10,7 @@
     box-shadow: 0 2px 8px rgba(214, 210, 210, 0.1);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     cursor: pointer;
+    position: relative;
 }
 
 .recipe-card:hover {
@@ -34,6 +35,26 @@
 .recipe-footer {
     margin-top: 1rem;
     font-size: 0.7rem;
-    color: #555;
     line-height: 1.4;
+}
+
+.delete-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    color: var(--main-border-color);
+    font-weight: bold;
+    cursor: pointer;
+    opacity: 0; /* hidden */
+    transition: opacity 0.2s ease;
+}
+
+/* Show delete button on hover */
+.recipe-card:hover .delete-button {
+    opacity: 1;
+}
+
+.delete-button:hover {
+    font-size: medium;
+    font-weight: 300;
 }

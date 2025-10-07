@@ -1,10 +1,15 @@
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomePage from "./components/HomePage";
+import RecipePage from "./components/RecipePage";
 
 function App() {
     return (
-        <>
-            <HomePage />
-        </>
+        <Router>
+            <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/recipe/:id" element={<RecipePage />} />
+            </Routes>
+        </Router>
     );
 }
 

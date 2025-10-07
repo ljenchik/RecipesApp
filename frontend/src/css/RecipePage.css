@@ -1,0 +1,92 @@
+/* Title */
+.recipe-page {
+    max-width: 900px;
+    margin: auto;
+    padding: 1rem;
+    font-family: Arial, sans-serif;
+}
+
+.recipe-title {
+    margin-bottom: 1rem;
+}
+
+.image-instructions-ingredients-row {
+    display: flex;
+    gap: 3rem;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+}
+
+.recipe-image {
+    width: 400px; /* consistent width */
+    height: 400px; /* consistent height */
+    object-fit: cover; /* crops excess while preserving aspect ratio */
+    border-radius: 12px; /* clean rounded corners */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    display: block;
+    image-rendering: auto; /* default smooth scaling */
+    image-rendering: crisp-edges; /* optional for sharper pixel edges */
+    image-rendering: -webkit-optimize-contrast; /* Chrome/WebKit enhancement */
+}
+
+/* Right side: ingredients */
+h3 {
+    margin: 0px;
+}
+
+.ingredients-section {
+    flex: 1;
+    max-height: 400px;
+    overflow-y: auto;
+    background: white;
+}
+
+.ingredients-section .section-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ingredients-list {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 0.5rem;
+}
+
+.ingredients-list li {
+    margin-bottom: 0.3rem;
+}
+
+.ingredients-list input[type="checkbox"] {
+    margin-right: 6px;
+}
+
+/* Instructions */
+
+.instructions-section {
+    margin-top: 1rem;
+}
+
+textarea {
+    width: 100%;
+    min-height: 80px;
+    margin: 0.5rem 0;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+/* Edit button */
+
+button {
+    margin: 0.2rem 0.2rem 0 0;
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: none;
+    background-color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #eceff2;
+}

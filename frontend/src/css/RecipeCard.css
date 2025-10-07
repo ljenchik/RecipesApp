@@ -1,17 +1,27 @@
+/* Container for multiple recipe cards */
 .recipes-container {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
-    justify-content: center;
+    justify-content: flex-start;
+    padding: 1rem;
 }
 
+/* Recipe card */
 .recipe-card {
     flex: 1 1 250px;
     max-width: 300px;
-    background: #fff;
+    background: #f8f4f4a6;
     border-radius: 10px;
     padding: 1rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(214, 210, 210, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+
+.recipe-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(208, 201, 201, 0.15);
 }
 
 .recipe-card img {
@@ -19,136 +29,11 @@
     height: 180px;
     object-fit: cover;
     border-radius: 8px;
+    margin-bottom: 0.8rem;
 }
 
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 100;
-    backdrop-filter: blur(4px);
-}
-
-.recipe-modal {
-    background: #fff;
-    padding: 24px;
-    width: 85%;
-    max-width: 720px;
-    border-radius: 14px;
-    overflow-y: auto;
-    max-height: 90vh;
-    position: relative;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-    animation: fadeIn 0.25s ease;
-}
-
-.close-btn {
-    position: absolute;
-    top: 12px;
-    right: 16px;
-    background: none;
-    border: none;
-    font-size: 22px;
-    cursor: pointer;
-    color: #555;
-    transition: color 0.2s ease;
-}
-
-.close-btn:hover {
-    color: #000;
-}
-
-.recipe-section {
-    margin-top: 18px;
-}
-
-.recipe-section h4 {
-    margin-bottom: 8px;
-    font-size: 1.05rem;
-    color: #222;
-}
-
-.recipe-section textarea {
-    width: 100%;
-    min-height: 90px;
-    margin-top: 6px;
-    padding: 8px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    resize: vertical;
-    font-family: inherit;
-    font-size: 0.95rem;
-    outline: none;
-    transition: border-color 0.2s ease;
-}
-
-.recipe-section textarea:focus {
-    border-color: #007bff;
-}
-
-.source-link {
-    margin-top: 12px;
-    text-align: right;
-}
-
-.source-link a {
-    color: #007bff;
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.2s ease;
-}
-
-.source-link a:hover {
-    color: #0056b3;
-}
-
-/* Smooth modal fade-in animation */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: scale(0.97);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-.add-note-btn,
-.edit-note-btn,
-.note-buttons button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 6px 12px;
-    margin-top: 8px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: background-color 0.2s ease;
-}
-
-.add-note-btn:hover,
-.edit-note-btn:hover,
-.note-buttons button:hover {
-    background-color: #0056b3;
-}
-
-.note-display p {
-    background: #f9f9f9;
-    border-radius: 8px;
-    padding: 8px;
-    color: #333;
-}
-
-.note-buttons {
-    display: flex;
-    gap: 10px;
-    margin-top: 6px;
+.recipe-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
 }

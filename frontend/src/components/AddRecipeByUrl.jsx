@@ -1,4 +1,3 @@
-// src/components/AddRecipeByUrl.jsx
 import { useState } from "react";
 
 function AddRecipeByUrl({ onRecipeAdded }) {

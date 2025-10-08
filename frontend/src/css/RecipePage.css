@@ -1,3 +1,17 @@
+/* Back button */
+.back-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    margin: 0;
+    padding: 0;
+    transition: all 0.2s ease;
+}
+
+.back-button:hover {
+    transform: scale(1.1) translateY(-2px);
+}
+
 /* Title */
 .recipe-page {
     max-width: 900px;
@@ -7,19 +21,26 @@
 
 .recipe-title {
     display: flex;
-    align-items: start;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.recipe-title input {
+    width: 50%;
 }
 
 /* Edit button */
 .edit-button {
-    display: flex;
-    flex-direction: center;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.9rem;
     border: none;
+    padding: 0.25rem 0.5rem;
     background: transparent;
     cursor: pointer;
     transition: transform 0.25s ease, color 0.25s ease;
     color: #555;
-    padding: 10 10 0 0;
 }
 
 .edit-button:hover {
@@ -27,26 +48,51 @@
     color: #000;
 }
 
-/* icon */
+/* Icon */
 .edit-button .icon {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     transition: transform 0.25s ease;
 }
 
-/* label */
+/* Label */
 .edit-button .label {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 500;
     opacity: 0;
-    transform: translateY(4px);
+    transform: translateX(-4px);
     transition: opacity 0.25s ease, transform 0.25s ease;
+    white-space: nowrap;
 }
 
 .edit-button:hover .label {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(0);
 }
 
+.tick-cross-buttons {
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+
+.tick-cross-buttons:hover {
+    transform: scale(1.1) translateY(-2px);
+}
+
+/* Recipe meta info */
+.recipe-meta {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.recipe-meta span {
+    font-size: 0.95rem;
+    color: #666;
+}
+
+/* Image + Ingredients row */
 .image-instructions-ingredients-row {
     display: flex;
     gap: 3rem;
@@ -57,13 +103,10 @@
 .recipe-image {
     width: 400px;
     height: 400px;
-    object-fit: cover; /* crops excess while preserving aspect ratio */
-    border-radius: 12px; /* clean rounded corners */
+    object-fit: cover;
+    border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     display: block;
-    image-rendering: auto; /* default smooth scaling */
-    image-rendering: crisp-edges; /* optional for sharper pixel edges */
-    image-rendering: -webkit-optimize-contrast; /* Chrome/WebKit enhancement */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -116,4 +159,76 @@ textarea {
     padding: 8px;
     border-radius: 6px;
     border: 1px solid #ccc;
+}
+
+/* ========== RESPONSIVE MEDIA QUERIES ========== */
+
+/* Tablets and smaller (below 900px) */
+@media (max-width: 900px) {
+    .recipe-image {
+        width: 300px;
+        height: 300px;
+    }
+
+    .image-instructions-ingredients-row {
+        gap: 2rem;
+    }
+
+    .ingredients-section {
+        max-height: 300px;
+    }
+}
+
+/* Medium mobile (below 700px) */
+@media (max-width: 700px) {
+    .image-instructions-ingredients-row {
+        flex-direction: column; /* Stack vertically */
+        gap: 1.5rem;
+    }
+
+    .recipe-image {
+        width: 100%;
+        max-width: 400px;
+        height: auto; /* Maintain aspect ratio */
+        margin: 0 auto; /* Center the image */
+    }
+
+    .ingredients-section {
+        max-height: none; /* Remove height limit on mobile */
+        width: 100%;
+    }
+
+    .recipe-meta {
+        gap: 1rem;
+    }
+}
+
+/* Small mobile (below 480px) */
+@media (max-width: 480px) {
+    .recipe-page {
+        padding: 0.5rem;
+    }
+
+    .recipe-title {
+        font-size: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .recipe-image {
+        max-width: 100%;
+        border-radius: 8px;
+    }
+
+    .recipe-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .edit-button .label {
+        display: none; /* Hide "Edit title" label on very small screens */
+    }
+
+    textarea {
+        font-size: 14px;
+    }
 }

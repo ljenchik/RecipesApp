@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "../css/RecipePage.css";
-import { parseTime } from "../utils/helpers";
+import { parseTime, parseServings } from "../utils/helpers";
 import icon from "../assets/svgs/recipes-app-icon.svg";
 
 function RecipePage() {
@@ -117,7 +117,17 @@ function RecipePage() {
                 </div>
             </header>
             <div className="recipe-page">
-                {/* <button onClick={() => navigate(-1)}>⬅ Back</button> */}
+                {/* <button
+                    className="back-button"
+                    onClick={() => navigate(-1)}
+                    style={{
+                        marginBottom: "1rem",
+                        padding: "0.5rem 1rem",
+                        cursor: "pointer",
+                    }}
+                >
+                    ⬅ Back
+                </button> */}
 
                 {/* Title */}
                 <h1 className="recipe-title">
@@ -128,6 +138,7 @@ function RecipePage() {
                                 onChange={(e) => setTitle(e.target.value)}
                             />
                             <button
+                                className="tick-cross-buttons"
                                 onClick={() => {
                                     updateField("title", title);
                                     setEditingTitle(false);
@@ -136,6 +147,7 @@ function RecipePage() {
                                 ✅
                             </button>
                             <button
+                                className="tick-cross-buttons"
                                 onClick={() => {
                                     setTitle(recipe.title);
                                     setEditingTitle(false);
@@ -162,11 +174,8 @@ function RecipePage() {
                     {recipe.prep_time && (
                         <span>⏱️ Prep: {parseTime(recipe.prep_time)}</span>
                     )}
-                    {recipe.cook_time && (
-                        <span>🔥 Cook: {parseTime(recipe.cook_time)}</span>
-                    )}
                     {recipe.servings && (
-                        <span>🍽️ Servings: {recipe.servings}</span>
+                        <span>🍽️ {parseServings(recipe.servings)}</span>
                     )}
                 </div>
 
@@ -187,8 +196,12 @@ function RecipePage() {
                     <div className="ingredients-section">
                         <div className="section-header">
                             <h3>Ingredients</h3>
-                            <button onClick={() => setEditingIngredients(true)}>
-                                ✏️
+                            <button
+                                className="edit-button"
+                                onClick={() => setEditingIngredients(true)}
+                            >
+                                <span className="icon">✏️</span>
+                                <span className="label">Edit ingredients</span>
                             </button>
                         </div>
 
@@ -201,6 +214,7 @@ function RecipePage() {
                                     }
                                 />
                                 <button
+                                    className="tick-cross-buttons"
                                     onClick={() => {
                                         updateField("ingredients", ingredients);
                                         setEditingIngredients(false);
@@ -209,6 +223,7 @@ function RecipePage() {
                                     ✅
                                 </button>
                                 <button
+                                    className="tick-cross-buttons"
                                     onClick={() => {
                                         setIngredients(
                                             recipe.ingredients.join("\n")
@@ -246,8 +261,12 @@ function RecipePage() {
                 <section className="instructions-section">
                     <div className="section-header">
                         <h3>Instructions</h3>
-                        <button onClick={() => setEditingInstructions(true)}>
-                            ✏️
+                        <button
+                            className="edit-button"
+                            onClick={() => setEditingInstructions(true)}
+                        >
+                            <span className="icon">✏️</span>
+                            <span className="label">Edit instructions</span>
                         </button>
                     </div>
                     {editingInstructions ? (
@@ -259,6 +278,7 @@ function RecipePage() {
                                 }
                             />
                             <button
+                                className="tick-cross-buttons"
                                 onClick={() => {
                                     updateField("instructions", instructions);
                                     setEditingInstructions(false);
@@ -267,6 +287,7 @@ function RecipePage() {
                                 ✅
                             </button>
                             <button
+                                className="tick-cross-buttons"
                                 onClick={() => {
                                     setInstructions(recipe.instructions);
                                     setEditingInstructions(false);
@@ -284,10 +305,19 @@ function RecipePage() {
                 <section className="notes-section">
                     <div className="section-header">
                         <h3>Notes</h3>
-                        <button onClick={() => setEditingNote(true)}>✏️</button>
+                        <button
+                            className="edit-button"
+                            onClick={() => setEditingNote(true)}
+                        >
+                            <span className="icon">✏️</span>
+                            <span className="label">Edit notes</span>
+                        </button>
                     </div>
                     {!note && !editingNote && (
-                        <button onClick={() => setEditingNote(true)}>
+                        <button
+                            className="tick-cross-buttons"
+                            onClick={() => setEditingNote(true)}
+                        >
                             ➕ Add Note
                         </button>
                     )}
@@ -300,6 +330,7 @@ function RecipePage() {
                             />
                             <button onClick={saveNote}>💾 Save</button>
                             <button
+                                className="tick-cross-buttons"
                                 onClick={() => {
                                     setNote(recipe.notes || "");
                                     setEditingNote(false);

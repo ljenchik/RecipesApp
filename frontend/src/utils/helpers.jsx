@@ -1,10 +1,20 @@
-// src/utils/helpers.js
-
+// Parse time from ISO 8601 or numeric format
 export const parseTime = (timeStr) => {
     if (!timeStr) return "N/A";
 
-    // Handle ISO 8601 duration format (PT30M, PT1H30M, PT2H)
-    const match = timeStr.match(/PT(?:(\d+)H)?(?:(\d+)M)?/);
+    // If it's a number, assume it's in minutes
+    if (typeof timeStr === "number" || !isNaN(Number(timeStr))) {
+        const totalMinutes = Number(timeStr);
+        const hours = Math.floor(totalMinutes / 60);
+        const minutes = totalMinutes % 60;
+
+        if (hours > 0 && minutes > 0) return `${hours}h ${minutes}m`;
+        if (hours > 0) return `${hours}h`;
+        return `${minutes}m`;
+    }
+
+    // Handle ISO 8601 duration format (PT30M, PT1H30M)
+    const match = String(timeStr).match(/PT(?:(\d+)H)?(?:(\d+)M)?/);
     if (match) {
         const hours = parseInt(match[1] || 0);
         const minutes = parseInt(match[2] || 0);
@@ -14,16 +24,30 @@ export const parseTime = (timeStr) => {
         if (minutes > 0) return `${minutes}m`;
     }
 
-    // If it's just a number (minutes), handle that too
-    const numericTime = parseInt(timeStr);
-    if (!isNaN(numericTime)) {
-        const hours = Math.floor(numericTime / 60);
-        const minutes = numericTime % 60;
+    return String(timeStr);
+};
 
-        if (hours > 0 && minutes > 0) return `${hours}h ${minutes}m`;
-        if (hours > 0) return `${hours}h`;
-        if (minutes > 0) return `${minutes}m`;
+// Parse servings to extract number and unit
+export const parseServings = (servingsStr) => {
+    if (!servingsStr) return "N/A";
+
+    const str = String(servingsStr).trim();
+
+    // Extract number from string (handles "12 servings", "2 pies", "24 cookies", etc.)
+    const match = str.match(/^(\d+)/);
+    if (match) {
+        const number = match[1];
+
+        // Check if there's a unit after the number
+        const unit = str.replace(/^\d+\s*/, "").trim();
+
+        // Return formatted string
+        if (unit) {
+            return `${number} ${unit}`;
+        }
+        return `${number}`;
     }
 
-    return timeStr; // Fallback to raw string
+    // If no number found, return as-is
+    return str;
 };

@@ -1,30 +1,67 @@
 /* Add recipe field */
+.add-recipe {
+    width: 100%;
+}
+
+.add-recipe form {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
 .add-recipe input {
-    width: 30%;
+    width: 30%; /* Default width */
+    min-width: 200px; /* Minimum width */
     padding: 10px;
     border-radius: 6px;
-    margin: 1rem 0 1rem 1rem;
-    border: 1.5px solid var(--main-border-color); /* thin default */
+    border: 1.5px solid var(--main-border-color);
     outline: none;
     transition: border-color 0.18s ease, border-width 0.18s ease;
 }
 
 .add-recipe input:focus {
-    border-width: 2.5px; /* thicker */
-    border-color: var(--secondary-border-color); /* purple */
+    border-width: 2.5px;
+    border-color: var(--secondary-border-color);
 }
 
 .add-recipe input:valid:focus {
-    border-color: var(--secondary-border-color); /* purple if valid */
+    border-color: var(--secondary-border-color);
 }
 
 .add-recipe button {
     background-color: var(--background-color);
     color: var(--main-text-color);
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.18s ease;
 }
 
 .add-recipe button:hover {
     background-color: var(--background-color);
-    font-size: medium;
     font-weight: bolder;
+    border-width: 2.5px;
+    border-color: var(--secondary-border-color);
+}
+
+.add-recipe button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Responsive: Make input bigger on smaller screens */
+@media (max-width: 900px) {
+    .add-recipe input {
+        width: 40%; /* Bigger on medium screens */
+    }
+}
+
+@media (max-width: 600px) {
+    .add-recipe input {
+        width: 50%; /* Even bigger on small screens */
+    }
+
+    .add-recipe form {
+        flex-wrap: wrap; /* Stack button below on very small screens if needed */
+    }
 }

@@ -7,6 +7,7 @@
     --font-family-base: "Arial", "Helvetica", sans-serif;
     --default-padding: 0;
     --default-margin: 0;
+    --max-container-width: 1200px; /* ADD THIS */
 }
 
 * {
@@ -57,13 +58,14 @@ select {
     font-family: var(--font-family-base);
 }
 
-/* Container for multiple recipe cards */
-.recipes-container {
+/* Header - Stack vertically */
+header {
+    max-width: var(--max-container-width);
+    margin: 0 auto;
+    padding: 1rem;
     display: flex;
-    flex-wrap: wrap;
-    margin-left: 1rem;
+    flex-direction: column; /* CHANGE: Stack vertically */
     gap: 1rem;
-    justify-content: flex-start;
 }
 
 /* Title app */
@@ -71,13 +73,55 @@ select {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-top: 1rem;
-    margin-left: 1rem;
+    margin: 0;
 }
 
 .title-app h1 {
     margin: 0;
-    font-size: 24pt;
     color: var(--main-text-color);
-    font-family: var(--font-family-base);
+    font-family: "cookie";
+    font-size: 30pt;
+}
+
+/* Container for multiple recipe cards */
+.recipes-container {
+    display: grid;
+    grid-template-columns: repeat(3, 300px);
+    gap: 1rem;
+    justify-content: center;
+    padding: 1rem;
+    margin: 0 auto;
+    max-width: var(--max-container-width);
+}
+
+.recipes-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+@font-face {
+    font-family: "cookie";
+    src: url("../assets/fonts/Cookie-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .recipes-container {
+        grid-template-columns: repeat(3, minmax(250px, 1fr));
+    }
+}
+
+@media (max-width: 900px) {
+    .recipes-container {
+        grid-template-columns: repeat(2, minmax(250px, 1fr));
+    }
+}
+
+@media (max-width: 600px) {
+    .recipes-container {
+        grid-template-columns: 1fr;
+    }
 }

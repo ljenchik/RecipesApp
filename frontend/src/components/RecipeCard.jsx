@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { parseTime } from "../utils/helpers";
 
 function RecipeCard({ recipe, onDelete }) {
     const navigate = useNavigate();
@@ -24,18 +25,12 @@ function RecipeCard({ recipe, onDelete }) {
                 <img src={recipe.image_url} alt={recipe.title} />
             )}
             <h3 className="recipe-title">{recipe.title}</h3>
+
             {/* Footer */}
             <div className="recipe-footer">
                 <div>Ingredients: {recipe.ingredients.length}</div>
                 <div>
-                    Cooking time:{" "}
-                    {Math.floor(recipe.prep_time / 60) > 0
-                        ? `${Math.floor(recipe.prep_time / 60)}h${
-                              recipe.prep_time % 60 !== 0
-                                  ? ` ${recipe.prep_time % 60}m`
-                                  : ""
-                          }`
-                        : `${recipe.prep_time}m`}
+                    <div>⏱️ {parseTime(recipe.prep_time)}</div>
                 </div>
             </div>
         </div>

@@ -10,7 +10,7 @@ import "../css/RecipeCard.css";
 import "../css/AddRecipeByUrl.css";
 
 // Assets
-import icon from "../assets/recipes-app-icon.svg";
+import icon from "../assets/svgs/recipes-app-icon.svg";
 
 function HomePage() {
     const [recipes, setRecipes] = useState([]);
@@ -66,10 +66,16 @@ function HomePage() {
                 <AddRecipeByUrl onRecipeAdded={fetchRecipes} />
             </header>
 
-            <div className="recipes-container">
-                {recipes.map((r) => (
-                    <RecipeCard key={r.id} recipe={r} onDelete={handleDelete} />
-                ))}
+            <div className="recipes-wrapper">
+                <div className="recipes-container">
+                    {recipes.map((r) => (
+                        <RecipeCard
+                            key={r.id}
+                            recipe={r}
+                            onDelete={handleDelete}
+                        />
+                    ))}
+                </div>
             </div>
         </div>
     );

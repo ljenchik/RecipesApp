@@ -27,9 +27,10 @@
 }
 
 .recipe-title {
-    font-size: 1rem;
+    font-size: 1.5rem;
     font-weight: 400;
     margin-bottom: 0.5rem;
+    font-family: var(--font-family-base);
 }
 
 .recipe-footer {
@@ -40,21 +41,22 @@
 
 .delete-button {
     position: absolute;
-    top: 8px;
-    right: 8px;
+    top: 5px;
+    right: 5px;
     color: var(--main-border-color);
     font-weight: bold;
     cursor: pointer;
-    opacity: 0; /* hidden */
+    opacity: 0;
     transition: opacity 0.2s ease;
+    background-color: white;
+    border: none;
+    border-radius: 6px;
 }
 
-/* Show delete button on hover */
 .recipe-card:hover .delete-button {
     opacity: 1;
 }
 
 .delete-button:hover {
     font-size: medium;
-    font-weight: 300;
 }

@@ -3,11 +3,48 @@
     max-width: 900px;
     margin: auto;
     padding: 1rem;
-    font-family: Arial, sans-serif;
 }
 
 .recipe-title {
-    margin-bottom: 1rem;
+    display: flex;
+    align-items: start;
+}
+
+/* Edit button */
+.edit-button {
+    display: flex;
+    flex-direction: center;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: transform 0.25s ease, color 0.25s ease;
+    color: #555;
+    padding: 10 10 0 0;
+}
+
+.edit-button:hover {
+    transform: scale(1.1) translateY(-2px);
+    color: #000;
+}
+
+/* icon */
+.edit-button .icon {
+    font-size: 0.8rem;
+    transition: transform 0.25s ease;
+}
+
+/* label */
+.edit-button .label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.edit-button:hover .label {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .image-instructions-ingredients-row {
@@ -18,8 +55,8 @@
 }
 
 .recipe-image {
-    width: 400px; /* consistent width */
-    height: 400px; /* consistent height */
+    width: 400px;
+    height: 400px;
     object-fit: cover; /* crops excess while preserving aspect ratio */
     border-radius: 12px; /* clean rounded corners */
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
@@ -27,6 +64,12 @@
     image-rendering: auto; /* default smooth scaling */
     image-rendering: crisp-edges; /* optional for sharper pixel edges */
     image-rendering: -webkit-optimize-contrast; /* Chrome/WebKit enhancement */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.recipe-image:hover {
+    transform: scale(1.01) translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 /* Right side: ingredients */
@@ -62,7 +105,6 @@ h3 {
 }
 
 /* Instructions */
-
 .instructions-section {
     margin-top: 1rem;
 }
@@ -74,19 +116,4 @@ textarea {
     padding: 8px;
     border-radius: 6px;
     border: 1px solid #ccc;
-}
-
-/* Edit button */
-
-button {
-    margin: 0.2rem 0.2rem 0 0;
-    padding: 4px 10px;
-    border-radius: 6px;
-    border: none;
-    background-color: white;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #eceff2;
 }

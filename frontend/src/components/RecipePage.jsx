@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "../css/RecipePage.css";
+import { parseTime } from "../utils/helpers";
+import icon from "../assets/svgs/recipes-app-icon.svg";
 
 function RecipePage() {
     const { id } = useParams();
@@ -100,184 +102,227 @@ function RecipePage() {
     if (!recipe) return <p>Loading...</p>;
 
     return (
-        <div className="recipe-page">
-            <button onClick={() => navigate(-1)}>⬅ Back</button>
-
-            {/* Title */}
-            <h1 className="recipe-title">
-                {editingTitle ? (
-                    <>
-                        <input
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                        />
-                        <button
-                            onClick={() => {
-                                updateField("title", title);
-                                setEditingTitle(false);
-                            }}
-                        >
-                            ✅
-                        </button>
-                        <button
-                            onClick={() => {
-                                setTitle(recipe.title);
-                                setEditingTitle(false);
-                            }}
-                        >
-                            ❌
-                        </button>
-                    </>
-                ) : (
-                    <>
-                        {title}{" "}
-                        <button onClick={() => setEditingTitle(true)}>
-                            ✏️
-                        </button>
-                    </>
-                )}
-            </h1>
-
-            {/* Image + Ingredients row */}
-            <div className="image-instructions-ingredients-row">
-                {/* Left side: Image  */}
-                <div className="image-instructions">
-                    {recipe.image_url && (
-                        <img
-                            src={recipe.image_url}
-                            alt={recipe.title}
-                            className="recipe-image"
-                        />
-                    )}
+        <div>
+            <header>
+                <div className="title-app">
+                    <img
+                        src={icon}
+                        alt="Recipes App Icon"
+                        style={{
+                            width: "40px",
+                            height: "40px",
+                        }}
+                    />
+                    <h1>RecipesApp</h1>
                 </div>
+            </header>
+            <div className="recipe-page">
+                {/* <button onClick={() => navigate(-1)}>⬅ Back</button> */}
 
-                {/* Right side: Ingredients */}
-                <div className="ingredients-section">
-                    <div className="section-header">
-                        <h3>Ingredients</h3>
-                        <button onClick={() => setEditingIngredients(true)}>
-                            ✏️
-                        </button>
-                    </div>
-
-                    {editingIngredients ? (
+                {/* Title */}
+                <h1 className="recipe-title">
+                    {editingTitle ? (
                         <>
-                            <textarea
-                                value={ingredients}
-                                onChange={(e) => setIngredients(e.target.value)}
+                            <input
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
                             />
                             <button
                                 onClick={() => {
-                                    updateField("ingredients", ingredients);
-                                    setEditingIngredients(false);
+                                    updateField("title", title);
+                                    setEditingTitle(false);
                                 }}
                             >
                                 ✅
                             </button>
                             <button
                                 onClick={() => {
-                                    setIngredients(
-                                        recipe.ingredients.join("\n")
-                                    );
-                                    setEditingIngredients(false);
+                                    setTitle(recipe.title);
+                                    setEditingTitle(false);
                                 }}
                             >
                                 ❌
                             </button>
                         </>
                     ) : (
-                        <ul className="ingredients-list scrollable">
-                            {ingredients.split("\n").map((ing, idx) => (
-                                <li key={idx}>
-                                    <label>
-                                        <input
-                                            type="checkbox"
-                                            checked={checkedItems[ing] || false}
-                                            onChange={() => handleCheck(ing)}
-                                        />
-                                        {ing}
-                                    </label>
-                                </li>
-                            ))}
-                        </ul>
+                        <>
+                            {title}{" "}
+                            <button
+                                className="edit-button"
+                                onClick={() => setEditingTitle(true)}
+                            >
+                                <span className="icon">✏️</span>
+                                <span className="label">Edit title</span>
+                            </button>
+                        </>
+                    )}
+                </h1>
+
+                <div className="recipe-meta">
+                    {recipe.prep_time && (
+                        <span>⏱️ Prep: {parseTime(recipe.prep_time)}</span>
+                    )}
+                    {recipe.cook_time && (
+                        <span>🔥 Cook: {parseTime(recipe.cook_time)}</span>
+                    )}
+                    {recipe.servings && (
+                        <span>🍽️ Servings: {recipe.servings}</span>
                     )}
                 </div>
-            </div>
 
-            {/* Instructions */}
-            <section className="instructions-section">
-                <div className="section-header">
-                    <h3>Instructions</h3>
-                    <button onClick={() => setEditingInstructions(true)}>
-                        ✏️
-                    </button>
-                </div>
-                {editingInstructions ? (
-                    <>
-                        <textarea
-                            value={instructions}
-                            onChange={(e) => setInstructions(e.target.value)}
-                        />
-                        <button
-                            onClick={() => {
-                                updateField("instructions", instructions);
-                                setEditingInstructions(false);
-                            }}
-                        >
-                            ✅
-                        </button>
-                        <button
-                            onClick={() => {
-                                setInstructions(recipe.instructions);
-                                setEditingInstructions(false);
-                            }}
-                        >
-                            ❌
-                        </button>
-                    </>
-                ) : (
-                    <p>{instructions}</p>
-                )}
-            </section>
+                {/* Image +Ingredients row */}
+                <div className="image-instructions-ingredients-row">
+                    {/* Left side: Image  */}
+                    <div className="image-instructions">
+                        {recipe.image_url && (
+                            <img
+                                src={recipe.image_url}
+                                alt={recipe.title}
+                                className="recipe-image"
+                            />
+                        )}
+                    </div>
 
-            {/* Notes */}
-            <section className="notes-section">
-                <div className="section-header">
-                    <h3>Notes</h3>
-                    <button onClick={() => setEditingNote(true)}>✏️</button>
+                    {/* Right side: Ingredients */}
+                    <div className="ingredients-section">
+                        <div className="section-header">
+                            <h3>Ingredients</h3>
+                            <button onClick={() => setEditingIngredients(true)}>
+                                ✏️
+                            </button>
+                        </div>
+
+                        {editingIngredients ? (
+                            <>
+                                <textarea
+                                    value={ingredients}
+                                    onChange={(e) =>
+                                        setIngredients(e.target.value)
+                                    }
+                                />
+                                <button
+                                    onClick={() => {
+                                        updateField("ingredients", ingredients);
+                                        setEditingIngredients(false);
+                                    }}
+                                >
+                                    ✅
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        setIngredients(
+                                            recipe.ingredients.join("\n")
+                                        );
+                                        setEditingIngredients(false);
+                                    }}
+                                >
+                                    ❌
+                                </button>
+                            </>
+                        ) : (
+                            <ul className="ingredients-list scrollable">
+                                {ingredients.split("\n").map((ing, idx) => (
+                                    <li key={idx}>
+                                        <label>
+                                            <input
+                                                type="checkbox"
+                                                checked={
+                                                    checkedItems[ing] || false
+                                                }
+                                                onChange={() =>
+                                                    handleCheck(ing)
+                                                }
+                                            />
+                                            {ing}
+                                        </label>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
                 </div>
-                {!note && !editingNote && (
-                    <button onClick={() => setEditingNote(true)}>
-                        ➕ Add Note
-                    </button>
-                )}
-                {note && !editingNote && <p>{note}</p>}
-                {editingNote && (
-                    <div>
-                        <textarea
-                            value={note}
-                            onChange={(e) => setNote(e.target.value)}
-                        />
-                        <button onClick={saveNote}>💾 Save</button>
-                        <button
-                            onClick={() => {
-                                setNote(recipe.notes || "");
-                                setEditingNote(false);
-                            }}
-                        >
-                            ❌
+
+                {/* Instructions */}
+                <section className="instructions-section">
+                    <div className="section-header">
+                        <h3>Instructions</h3>
+                        <button onClick={() => setEditingInstructions(true)}>
+                            ✏️
                         </button>
                     </div>
-                )}
-            </section>
+                    {editingInstructions ? (
+                        <>
+                            <textarea
+                                value={instructions}
+                                onChange={(e) =>
+                                    setInstructions(e.target.value)
+                                }
+                            />
+                            <button
+                                onClick={() => {
+                                    updateField("instructions", instructions);
+                                    setEditingInstructions(false);
+                                }}
+                            >
+                                ✅
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setInstructions(recipe.instructions);
+                                    setEditingInstructions(false);
+                                }}
+                            >
+                                ❌
+                            </button>
+                        </>
+                    ) : (
+                        <p>{instructions}</p>
+                    )}
+                </section>
 
-            {recipe.source && (
-                <p className="source-link">
-                    <a href={recipe.source} target="_blank" rel="noreferrer">
-                        Original Recipe
-                    </a>
-                </p>
-            )}
+                {/* Notes */}
+                <section className="notes-section">
+                    <div className="section-header">
+                        <h3>Notes</h3>
+                        <button onClick={() => setEditingNote(true)}>✏️</button>
+                    </div>
+                    {!note && !editingNote && (
+                        <button onClick={() => setEditingNote(true)}>
+                            ➕ Add Note
+                        </button>
+                    )}
+                    {note && !editingNote && <p>{note}</p>}
+                    {editingNote && (
+                        <div>
+                            <textarea
+                                value={note}
+                                onChange={(e) => setNote(e.target.value)}
+                            />
+                            <button onClick={saveNote}>💾 Save</button>
+                            <button
+                                onClick={() => {
+                                    setNote(recipe.notes || "");
+                                    setEditingNote(false);
+                                }}
+                            >
+                                ❌
+                            </button>
+                        </div>
+                    )}
+                </section>
+
+                {recipe.source && (
+                    <p className="source-link">
+                        <a
+                            href={recipe.source}
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            Original Recipe
+                        </a>
+                    </p>
+                )}
+            </div>
         </div>
     );
 }

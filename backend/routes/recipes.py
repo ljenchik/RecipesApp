@@ -3,6 +3,8 @@ from recipe_scrapers import scrape_html
 import requests
 from bs4 import BeautifulSoup
 from models.models import db, Recipe
+from urllib.parse import urlparse
+from utils.helpers import is_valid_url 
 import json
 
 recipes_bp = Blueprint('recipes', __name__)
@@ -10,7 +12,7 @@ recipes_bp = Blueprint('recipes', __name__)
 def generic_parse(html, url):
     """Fallback parser for unsupported sites"""
     soup = BeautifulSoup(html, 'html.parser')
-    
+
     recipe_data = {
         'title': 'Unknown Recipe',
         'ingredients': [],
@@ -48,7 +50,11 @@ def generic_parse(html, url):
                     recipe_data['instructions'] = str(instructions)
                 
                 recipe_data['prepTime'] = recipe.get('totalTime') or recipe.get('prepTime')
-                recipe_data['servings'] = recipe.get('recipeYield')
+                servings = recipe.get('recipeYield')
+                if isinstance(servings, list):
+                    recipe_data['servings'] = servings[0] if servings else None
+                else:
+                    recipe_data['servings'] = servings
                 
                 # Handle image
                 image = recipe.get('image')
@@ -80,16 +86,26 @@ def parse_recipe():
     try:
         data = request.get_json()
         url = data.get('url')
-        
+
         if not url:
             return jsonify({"error": "URL is required"}), 400
+        if not is_valid_url(url):
+            return jsonify({"error": "Invalid URL format"}), 400
         
         print(f"📖 Parsing recipe from: {url}")
-        
-        # Fetch HTML
-        response = requests.get(url, headers={
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
-        })
+
+        try:
+            response = requests.get(url, headers={
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
+            }, timeout=10)
+            
+            if response.status_code != 200:
+                return jsonify({"error": f"Failed to fetch URL: {response.status_code}"}), 400
+                
+        except requests.exceptions.Timeout:
+            return jsonify({"error": "Request timed out"}), 408
+        except requests.exceptions.RequestException as e:
+            return jsonify({"error": f"Failed to fetch URL: {str(e)}"}), 400
         
         try:
             # Try recipe-scrapers first
@@ -181,6 +197,33 @@ def get_recipe(recipe_id):
         return jsonify(recipe.to_dict()), 200
     return jsonify({"error": "Recipe not found"}), 404
 
+# Update recipe (full update)
+@recipes_bp.route('/<int:recipe_id>', methods=['PUT'])
+def update_recipe(recipe_id):
+    try:
+        data = request.get_json()
+        recipe = Recipe.query.get(recipe_id)
+        
+        if not recipe:
+            return jsonify({"error": "Recipe not found"}), 404
+        
+        # Update fields if provided
+        if 'title' in data:
+            recipe.title = data['title']
+        if 'ingredients' in data:
+            recipe.ingredients = data['ingredients']
+        if 'instructions' in data:
+            recipe.instructions = data['instructions']
+        if 'notes' in data:
+            recipe.notes = data['notes']
+        
+        db.session.commit()
+        return jsonify(recipe.to_dict()), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+
 # Update recipe notes
 @recipes_bp.route('/<int:recipe_id>/notes', methods=['PUT'])
 def update_notes(recipe_id):
@@ -227,9 +270,16 @@ def parse_and_save():
         if not url:
             return jsonify({"error": "URL is required"}), 400
         
+        existing = Recipe.query.filter_by(user_id=user_id, source_url=url).first()
+        if existing:
+            return jsonify({
+                "error": "Recipe already saved",
+                "recipe": existing.to_dict()
+            }), 409
+        
         print(f"📖 Parsing and saving from: {url}")
         
-        response = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'})
+        response = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}, timeout=10)
         
         try:
             scraper = scrape_html(html=response.content, org_url=url)

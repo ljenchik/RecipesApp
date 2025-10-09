@@ -24,14 +24,12 @@ function RecipeCard({ recipe, onDelete }) {
             {recipe.image_url && (
                 <img src={recipe.image_url} alt={recipe.title} />
             )}
-            <h3 className="recipe-title">{recipe.title}</h3>
+            <h3 className="recipe-title-card">{recipe.title}</h3>
 
             {/* Footer */}
             <div className="recipe-footer">
                 <div>Ingredients: {recipe.ingredients.length}</div>
-                <div>
-                    <div>⏱️ {parseTime(recipe.prep_time)}</div>
-                </div>
+                <div>⏱️ {parseTime(recipe.prep_time)}</div>
             </div>
         </div>
     );

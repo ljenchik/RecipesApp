@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 
 import "../css/RecipePage.css";
-import { parseTime, parseServings } from "../utils/helpers";
+import { parseTime, parseServings, formatInstructions } from "../utils/helpers";
 import icon from "../assets/svgs/recipes-app-icon.svg";
 
 function RecipePage() {
@@ -331,18 +331,20 @@ function RecipePage() {
                         </div>
                     ) : (
                         <div className="instructions-content">
-                            {instructions.split("\n").map(
+                            {formatInstructions(instructions).map(
                                 (step, idx) =>
                                     step.trim() && (
-                                        <p
+                                        <div
                                             key={idx}
                                             className="instruction-step"
                                         >
                                             <span className="step-number">
                                                 {idx + 1}.
                                             </span>
-                                            {step}
-                                        </p>
+                                            <div className="step-text">
+                                                {step}
+                                            </div>
+                                        </div>
                                     )
                             )}
                         </div>

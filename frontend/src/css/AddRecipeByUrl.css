@@ -12,11 +12,11 @@
 }
 
 .add-recipe input {
-    width: 30%; /* Default width */
-    min-width: 200px; /* Minimum width */
+    width: 30%;
+    min-width: 200px;
     padding: 10px;
     border-radius: 6px;
-    border: 1.5px solid var(--main-border-color);
+    border: 1.5px solid var(--border-color);
     outline: none;
     margin: 0;
     transition: border-color 0.18s ease, border-width 0.18s ease;
@@ -24,11 +24,11 @@
 
 .add-recipe input:focus {
     border-width: 2.5px;
-    border-color: var(--secondary-border-color);
+    border-color: var(--border-color);
 }
 
 .add-recipe input:valid:focus {
-    border-color: var(--secondary-border-color);
+    border-color: var(--border-color);
 }
 
 .add-recipe button {
@@ -41,10 +41,11 @@
 }
 
 .add-recipe button:hover {
-    background-color: var(--background-color);
+    background-color: transparent;
     font-weight: bolder;
     border-width: 2.5px;
-    border-color: var(--secondary-border-color);
+    border-color: var(--border-color);
+    font-family: var(--font-body);
 }
 
 .add-recipe button:disabled {

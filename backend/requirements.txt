@@ -6,3 +6,4 @@ psycopg2-binary
 recipe-scrapers
 requests
 beautifulsoup4
+chardet

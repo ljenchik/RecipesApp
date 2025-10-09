@@ -1,3 +1,27 @@
+/* Title app link */
+.title-app-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.title-app {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.title-app:hover {
+    transform: translateY(-2px);
+    opacity: 0.8;
+}
+
+.title-app:active {
+    transform: translateY(0);
+}
+
 /* Back button */
 .back-button {
     background: transparent;
@@ -227,18 +251,158 @@
 .instructions-section {
     background: white;
     border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.instructions-section .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--main-border-color);
+}
+
+.instructions-section .section-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+/* Instructions content */
+.instructions-content {
+    max-height: 500px;
+    overflow-y: auto;
+    padding-right: 0.3rem;
+}
+
+.instruction-step {
+    margin-bottom: 1rem;
+    color: var(--main-text-color);
+    display: flex;
+    gap: 0.4rem;
+}
+
+.step-number {
+    font-weight: bold;
+    color: var(--main-text-color);
+    flex-shrink: 0;
+    min-width: 1rem;
+}
+
+/* Instructions editing mode */
+.instructions-section .edit-mode {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    min-height: 300px;
+}
+
+.instructions-textarea {
+    min-height: 300px;
+    max-height: 450px;
+    font-family: var(--font-family-base);
+    line-height: 1.6;
+    resize: vertical;
+    overflow-y: auto;
+}
+
+/* Notes section */
+.notes-section {
+    background: white;
+    border-radius: 8px;
     padding: 1.5rem;
     margin-bottom: 1.5rem;
-    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-.instructions-content {
-    line-height: 1.8;
-}
-
-.instructions-content p {
+.notes-section .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--main-border-color);
+}
+
+.notes-section .section-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+/* Notes content */
+.notes-content {
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+.notes-content p {
+    margin: 0;
     color: #333;
+    white-space: pre-wrap; /* Preserve line breaks */
+    word-wrap: break-word;
+}
+
+/* Add note button */
+.add-note-button {
+    border: none;
+    background: transparent;
+    color: var(--main-text-color);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    gap: 0.3rem;
+    padding: 0;
+}
+
+.add-note-button:hover {
+    transform: scale(1.1) translateY(-2px);
+}
+
+/* Notes editing mode */
+.notes-section .edit-mode {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.notes-textarea {
+    min-height: 150px;
+    max-height: 300px;
+    font-family: var(--font-family-base);
+    line-height: 1.4;
+    resize: vertical;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+    .notes-content {
+        max-height: 300px;
+    }
+
+    .notes-textarea {
+        min-height: 120px;
+    }
+}
+
+@media (max-width: 480px) {
+    .notes-section {
+        padding: 0.75rem;
+    }
+
+    .add-note-button {
+        padding: 0.75rem;
+        font-size: 0.9rem;
+    }
+
+    .notes-textarea {
+        min-height: 100px;
+        font-size: 0.9rem;
+    }
 }
 
 /* ========== RESPONSIVE MEDIA QUERIES ========== */
@@ -246,16 +410,16 @@
 /* Tablets (below 900px) */
 @media (max-width: 900px) {
     .image-ingredients-row {
-        grid-template-columns: 250px 1fr;
+        grid-template-columns: 300px 1fr;
         gap: 1.5rem;
     }
 
     .recipe-image {
-        height: 250px;
+        height: 300px;
     }
 
-    .ingredients-list {
-        max-height: 300px;
+    .ingredients-section {
+        height: 300px; /* Match smaller image height */
     }
 }
 
@@ -272,12 +436,30 @@
         margin: 0 auto;
     }
 
+    .ingredients-section {
+        height: auto; /* Remove fixed height on mobile */
+        max-height: 500px; /* Add max-height instead */
+    }
+
     .ingredients-list {
         max-height: none;
     }
 
     .recipe-meta {
         gap: 1rem;
+    }
+
+    .instructions-content {
+        max-height: 500px;
+    }
+
+    .instructions-textarea {
+        min-height: 300px !important;
+    }
+
+    .instruction-step {
+        flex-direction: column;
+        gap: 0.25rem;
     }
 }
 
@@ -317,44 +499,15 @@
     }
 
     .instructions-textarea {
-        min-height: 200px;
-    }
-}
-
-/* Tablets (below 900px) */
-@media (max-width: 900px) {
-    .image-ingredients-row {
-        grid-template-columns: 300px 1fr; /* CHANGE: Keep image 300px, ingredients flexible */
-        gap: 1.5rem;
+        min-height: 250px !important;
     }
 
-    .recipe-image {
-        height: 300px;
+    .tick-cross-buttons {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.85rem;
     }
 
-    .ingredients-list {
-        max-height: 300px;
-    }
-}
-
-/* Medium screens (below 700px) - Stack layout */
-@media (max-width: 700px) {
-    .image-ingredients-row {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-
-    .recipe-image {
-        height: auto;
-        max-width: 400px;
-        margin: 0 auto;
-    }
-
-    .ingredients-list {
-        max-height: none;
-    }
-
-    .recipe-meta {
-        gap: 1rem;
+    .step-number {
+        margin-bottom: 0.25rem;
     }
 }

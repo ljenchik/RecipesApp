@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
+
 import "../css/RecipePage.css";
 import { parseTime, parseServings } from "../utils/helpers";
 import icon from "../assets/svgs/recipes-app-icon.svg";
@@ -104,17 +105,19 @@ function RecipePage() {
     return (
         <div>
             <header>
-                <div className="title-app">
-                    <img
-                        src={icon}
-                        alt="Recipes App Icon"
-                        style={{
-                            width: "40px",
-                            height: "40px",
-                        }}
-                    />
-                    <h1>RecipesApp</h1>
-                </div>
+                <Link to="/" className="title-app-link">
+                    <div className="title-app">
+                        <img
+                            src={icon}
+                            alt="Recipes App Icon"
+                            style={{
+                                width: "40px",
+                                height: "40px",
+                            }}
+                        />
+                        <h1>RecipesApp</h1>
+                    </div>
+                </Link>
             </header>
             <div className="recipe-page">
                 {/* <button
@@ -288,38 +291,61 @@ function RecipePage() {
                             onClick={() => setEditingInstructions(true)}
                         >
                             <span className="icon">✏️</span>
-                            <span className="label">Edit instructions</span>
+                            <span className="label">Edit</span>
                         </button>
                     </div>
+
                     {editingInstructions ? (
-                        <>
+                        <div className="edit-mode">
                             <textarea
+                                className="edit-textarea instructions-textarea"
                                 value={instructions}
                                 onChange={(e) =>
                                     setInstructions(e.target.value)
                                 }
+                                placeholder="Enter instructions..."
                             />
-                            <button
-                                className="tick-cross-buttons"
-                                onClick={() => {
-                                    updateField("instructions", instructions);
-                                    setEditingInstructions(false);
-                                }}
-                            >
-                                ✅
-                            </button>
-                            <button
-                                className="tick-cross-buttons"
-                                onClick={() => {
-                                    setInstructions(recipe.instructions);
-                                    setEditingInstructions(false);
-                                }}
-                            >
-                                ❌
-                            </button>
-                        </>
+                            <div className="edit-buttons">
+                                <button
+                                    className="tick-cross-buttons save-btn"
+                                    onClick={() => {
+                                        updateField(
+                                            "instructions",
+                                            instructions
+                                        );
+                                        setEditingInstructions(false);
+                                    }}
+                                >
+                                    ✅
+                                </button>
+                                <button
+                                    className="tick-cross-buttons cancel-btn"
+                                    onClick={() => {
+                                        setInstructions(recipe.instructions);
+                                        setEditingInstructions(false);
+                                    }}
+                                >
+                                    ❌
+                                </button>
+                            </div>
+                        </div>
                     ) : (
-                        <p>{instructions}</p>
+                        <div className="instructions-content">
+                            {instructions.split("\n").map(
+                                (step, idx) =>
+                                    step.trim() && (
+                                        <p
+                                            key={idx}
+                                            className="instruction-step"
+                                        >
+                                            <span className="step-number">
+                                                {idx + 1}.
+                                            </span>
+                                            {step}
+                                        </p>
+                                    )
+                            )}
+                        </div>
                     )}
                 </section>
 
@@ -327,39 +353,57 @@ function RecipePage() {
                 <section className="notes-section">
                     <div className="section-header">
                         <h3>Notes</h3>
-                        <button
-                            className="edit-button"
-                            onClick={() => setEditingNote(true)}
-                        >
-                            <span className="icon">✏️</span>
-                            <span className="label">Edit notes</span>
-                        </button>
+                        {note && !editingNote && (
+                            <button
+                                className="edit-button"
+                                onClick={() => setEditingNote(true)}
+                            >
+                                <span className="icon">✏️</span>
+                                <span className="label">Edit</span>
+                            </button>
+                        )}
                     </div>
+
                     {!note && !editingNote && (
                         <button
-                            className="tick-cross-buttons"
+                            className="add-note-button"
                             onClick={() => setEditingNote(true)}
                         >
-                            ➕ Add Note
+                            Add Note
                         </button>
                     )}
-                    {note && !editingNote && <p>{note}</p>}
+
+                    {note && !editingNote && (
+                        <div className="notes-content">
+                            <p>{note}</p>
+                        </div>
+                    )}
+
                     {editingNote && (
-                        <div>
+                        <div className="edit-mode">
                             <textarea
+                                className="edit-textarea notes-textarea"
                                 value={note}
                                 onChange={(e) => setNote(e.target.value)}
+                                placeholder="Add your personal notes here..."
                             />
-                            <button onClick={saveNote}>💾 Save</button>
-                            <button
-                                className="tick-cross-buttons"
-                                onClick={() => {
-                                    setNote(recipe.notes || "");
-                                    setEditingNote(false);
-                                }}
-                            >
-                                ❌
-                            </button>
+                            <div className="edit-buttons">
+                                <button
+                                    className="tick-cross-buttons save-btn"
+                                    onClick={saveNote}
+                                >
+                                    ✅
+                                </button>
+                                <button
+                                    className="tick-cross-buttons cancel-btn"
+                                    onClick={() => {
+                                        setNote(recipe.notes || "");
+                                        setEditingNote(false);
+                                    }}
+                                >
+                                    ❌
+                                </button>
+                            </div>
                         </div>
                     )}
                 </section>

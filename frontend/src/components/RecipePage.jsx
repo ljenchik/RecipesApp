@@ -170,26 +170,29 @@ function RecipePage() {
                     )}
                 </h1>
 
-                <div className="recipe-meta">
-                    {recipe.prep_time && (
-                        <span>⏱️ Prep: {parseTime(recipe.prep_time)}</span>
-                    )}
-                    {recipe.servings && (
-                        <span>🍽️ {parseServings(recipe.servings)}</span>
-                    )}
-                </div>
-
-                {/* Image +Ingredients row */}
-                <div className="image-instructions-ingredients-row">
-                    {/* Left side: Image  */}
-                    <div className="image-instructions">
+                {/* Image + Ingredients row */}
+                <div className="image-ingredients-row">
+                    <div>
+                        {/* Left side: Image */}
                         {recipe.image_url && (
-                            <img
-                                src={recipe.image_url}
-                                alt={recipe.title}
-                                className="recipe-image"
-                            />
+                            <div className="image-container">
+                                <img
+                                    src={recipe.image_url}
+                                    alt={recipe.title}
+                                    className="recipe-image"
+                                />
+                            </div>
                         )}
+                        <div className="recipe-meta">
+                            {recipe.prep_time && (
+                                <span>
+                                    ⏱️ Prep: {parseTime(recipe.prep_time)}
+                                </span>
+                            )}
+                            {recipe.servings && (
+                                <span>🍽️ {parseServings(recipe.servings)}</span>
+                            )}
+                        </div>
                     </div>
 
                     {/* Right side: Ingredients */}
@@ -201,57 +204,76 @@ function RecipePage() {
                                 onClick={() => setEditingIngredients(true)}
                             >
                                 <span className="icon">✏️</span>
-                                <span className="label">Edit ingredients</span>
+                                <span className="label">Edit</span>
                             </button>
                         </div>
 
                         {editingIngredients ? (
-                            <>
+                            <div className="edit-mode">
                                 <textarea
+                                    className="edit-textarea"
                                     value={ingredients}
                                     onChange={(e) =>
                                         setIngredients(e.target.value)
                                     }
+                                    placeholder="Enter ingredients, one per line..."
                                 />
-                                <button
-                                    className="tick-cross-buttons"
-                                    onClick={() => {
-                                        updateField("ingredients", ingredients);
-                                        setEditingIngredients(false);
-                                    }}
-                                >
-                                    ✅
-                                </button>
-                                <button
-                                    className="tick-cross-buttons"
-                                    onClick={() => {
-                                        setIngredients(
-                                            recipe.ingredients.join("\n")
-                                        );
-                                        setEditingIngredients(false);
-                                    }}
-                                >
-                                    ❌
-                                </button>
-                            </>
+                                <div className="edit-buttons">
+                                    <button
+                                        className="tick-cross-buttons"
+                                        onClick={() => {
+                                            updateField(
+                                                "ingredients",
+                                                ingredients
+                                            );
+                                            setEditingIngredients(false);
+                                        }}
+                                    >
+                                        ✅
+                                    </button>
+                                    <button
+                                        className="tick-cross-buttons"
+                                        onClick={() => {
+                                            setIngredients(
+                                                recipe.ingredients.join("\n")
+                                            );
+                                            setEditingIngredients(false);
+                                        }}
+                                    >
+                                        ❌
+                                    </button>
+                                </div>
+                            </div>
                         ) : (
-                            <ul className="ingredients-list scrollable">
-                                {ingredients.split("\n").map((ing, idx) => (
-                                    <li key={idx}>
-                                        <label>
-                                            <input
-                                                type="checkbox"
-                                                checked={
-                                                    checkedItems[ing] || false
-                                                }
-                                                onChange={() =>
-                                                    handleCheck(ing)
-                                                }
-                                            />
-                                            {ing}
-                                        </label>
-                                    </li>
-                                ))}
+                            <ul className="ingredients-list">
+                                {ingredients.split("\n").map(
+                                    (ing, idx) =>
+                                        ing.trim() && (
+                                            <li key={idx}>
+                                                <label>
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={
+                                                            checkedItems[ing] ||
+                                                            false
+                                                        }
+                                                        onChange={() =>
+                                                            handleCheck(ing)
+                                                        }
+                                                    />
+                                                    <span
+                                                        className={
+                                                            checkedItems[ing]
+                                                                ? "checked"
+                                                                : ""
+                                                        }
+                                                    >
+                                                        {ing}
+                                                    </span>
+                                                </label>
+                                            </li>
+                                        )
+                                )}
                             </ul>
                         )}
                     </div>

@@ -202,10 +202,10 @@ function RecipePage() {
                                     <span className="label">Edit</span>
                                 </button>
                             </div>
-                            <div className="conversion-toggle-container">
+                            <div>
                                 <button
                                     className={`conversion-toggle ${
-                                        useMetric ? "active" : ""
+                                        useMetric ? "selected" : "unselected"
                                     }`}
                                     onClick={() => setUseMetric(true)}
                                     title="Switch to Metric"
@@ -215,7 +215,7 @@ function RecipePage() {
 
                                 <button
                                     className={`conversion-toggle ${
-                                        !useMetric ? "active" : ""
+                                        !useMetric ? "selected" : "unselected"
                                     }`}
                                     onClick={() => setUseMetric(false)}
                                     title="Switch to UK/Imperial"

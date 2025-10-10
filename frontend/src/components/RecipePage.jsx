@@ -202,19 +202,27 @@ function RecipePage() {
                                     <span className="label">Edit</span>
                                 </button>
                             </div>
-                            <button
-                                className={`conversion-toggle ${
-                                    useMetric ? "metric" : "imperial"
-                                }`}
-                                onClick={() => setUseMetric(!useMetric)}
-                                title={
-                                    useMetric
-                                        ? "Switch to US/Imperial"
-                                        : "Switch to Metric"
-                                }
-                            >
-                                {useMetric ? "Metric" : "UK"}
-                            </button>
+                            <div className="conversion-toggle-container">
+                                <button
+                                    className={`conversion-toggle ${
+                                        useMetric ? "active" : ""
+                                    }`}
+                                    onClick={() => setUseMetric(true)}
+                                    title="Switch to Metric"
+                                >
+                                    Metric
+                                </button>
+
+                                <button
+                                    className={`conversion-toggle ${
+                                        !useMetric ? "active" : ""
+                                    }`}
+                                    onClick={() => setUseMetric(false)}
+                                    title="Switch to UK/Imperial"
+                                >
+                                    UK
+                                </button>
+                            </div>
                         </div>
 
                         {editingIngredients ? (

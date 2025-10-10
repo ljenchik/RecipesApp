@@ -144,7 +144,7 @@
 .image-ingredients-row {
     width: 100%;
     display: grid;
-    grid-template-columns: 1fr 1fr; /* Equal columns that fill width */
+    grid-template-columns: 1fr 1fr;
     gap: 2rem;
     margin-bottom: 1rem;
     max-width: 900px; /* Control max width */
@@ -153,6 +153,22 @@
 /* Image container */
 .image-container {
     width: 100%;
+    position: relative;
+    display: inline-block;
+}
+
+.image-container .edit-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: none;
+    padding: 0;
+    cursor: pointer;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    transition: background 0.2s ease;
+    flex-direction: row-reverse;
 }
 
 .recipe-image {

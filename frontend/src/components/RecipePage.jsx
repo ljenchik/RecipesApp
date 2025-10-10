@@ -158,7 +158,7 @@ function RecipePage() {
                                 onClick={() => setEditingTitle(true)}
                             >
                                 <span className="icon">✏️</span>
-                                <span className="label">Edit</span>
+                                <span className="label">Edit title</span>
                             </button>
                         </>
                     )}
@@ -175,6 +175,13 @@ function RecipePage() {
                                     alt={recipe.title}
                                     className="recipe-image"
                                 />
+                                <button
+                                    className="edit-button"
+                                    onClick={() => setUpdateImage(true)}
+                                >
+                                    <span className="icon">✏️</span>
+                                    <span className="label">Update image</span>
+                                </button>
                             </div>
                         )}
                         <div className="recipe-meta">
@@ -186,7 +193,7 @@ function RecipePage() {
                             )}
                             {recipe.source_url && (
                                 <span>
-                                    🔗{" "}
+                                    🫕{" "}
                                     <a
                                         className="original-link"
                                         href={recipe.source_url}
@@ -210,7 +217,9 @@ function RecipePage() {
                                     onClick={() => setEditingIngredients(true)}
                                 >
                                     <span className="icon">✏️</span>
-                                    <span className="label">Edit</span>
+                                    <span className="label">
+                                        Edit ingredients
+                                    </span>
                                 </button>
                             </div>
                             <div>
@@ -313,14 +322,16 @@ function RecipePage() {
                 {/* Instructions */}
                 <section className="instructions-section">
                     <div className="section-header">
-                        <h3>Instructions</h3>
-                        <button
-                            className="edit-button"
-                            onClick={() => setEditingInstructions(true)}
-                        >
-                            <span className="icon">✏️</span>
-                            <span className="label">Edit</span>
-                        </button>
+                        <div className="header-left">
+                            <h3>Instructions</h3>
+                            <button
+                                className="edit-button"
+                                onClick={() => setEditingInstructions(true)}
+                            >
+                                <span className="icon">✏️</span>
+                                <span className="label">Edit instructions</span>
+                            </button>
+                        </div>
                     </div>
 
                     {editingInstructions ? (
@@ -382,16 +393,18 @@ function RecipePage() {
                 {/* Notes */}
                 <section className="notes-section">
                     <div className="section-header">
-                        <h3>Notes</h3>
-                        {note && !editingNote && (
-                            <button
-                                className="edit-button"
-                                onClick={() => setEditingNote(true)}
-                            >
-                                <span className="icon">✏️</span>
-                                <span className="label">Edit</span>
-                            </button>
-                        )}
+                        <div className="header-left">
+                            <h3>Notes</h3>
+                            {note && !editingNote && (
+                                <button
+                                    className="edit-button"
+                                    onClick={() => setEditingNote(true)}
+                                >
+                                    <span className="icon">✏️</span>
+                                    <span className="label">Edit notes</span>
+                                </button>
+                            )}
+                        </div>
                     </div>
 
                     {!note && !editingNote && (

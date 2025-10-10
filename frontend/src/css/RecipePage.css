@@ -196,6 +196,85 @@
     color: var(--heading-color);
 }
 
+/* Toggle UK/Metric */
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Conversion toggle button */
+.conversion-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 70px;
+    font-size: 0.85rem;
+    font-family: var(--font-ui);
+    font-weight: 600;
+    border: 2px solid var(--main-border-color);
+    padding: 0.4rem 0.75rem;
+    border-radius: 6px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: var(--main-text-color);
+}
+
+.conversion-toggle:hover {
+    transform: translateY(-2px);
+    background: #f8f9fa;
+    border-color: var(--secondary-border-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.conversion-toggle:active {
+    transform: translateY(0);
+}
+
+/* Active state styling */
+.conversion-toggle.metric {
+    background: #e8f5e9;
+    border-color: #4caf50;
+    color: #2e7d32;
+}
+
+.conversion-toggle.imperial {
+    background: #e3f2fd;
+    border-color: #2196f3;
+    color: #1565c0;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+    .header-left {
+        gap: 0.35rem;
+    }
+
+    .conversion-toggle {
+        font-size: 0.8rem;
+        padding: 0.35rem 0.6rem;
+        min-width: 60px;
+    }
+}
+
+@media (max-width: 480px) {
+    .section-header {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .header-left {
+        width: 100%;
+    }
+
+    .conversion-toggle {
+        font-size: 0.75rem;
+        padding: 0.3rem 0.5rem;
+        min-width: 55px;
+    }
+}
+
 /* Ingredients list */
 .ingredients-list {
     list-style: none;

@@ -72,8 +72,6 @@ export const formatInstructions = (text) => {
     }
 
     // 3. Single giant paragraph - need to intelligently split
-    // This is the case for your Natasha's Kitchen recipe
-
     const steps = [];
     let current = "";
     let parenDepth = 0;

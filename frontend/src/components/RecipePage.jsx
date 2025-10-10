@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 
 import "../css/RecipePage.css";
 import { parseTime, parseServings, formatInstructions } from "../utils/helpers";
+import { convertIngredient } from "../utils/convertIngredient";
 import icon from "../assets/svgs/recipes-app-icon.svg";
 
 function RecipePage() {
@@ -21,6 +22,8 @@ function RecipePage() {
     const [instructions, setInstructions] = useState("");
     const [note, setNote] = useState("");
     const [checkedItems, setCheckedItems] = useState({});
+
+    const [useMetric, setUseMetric] = useState(false);
 
     useEffect(() => {
         fetch(`/recipes/${id}`)
@@ -120,18 +123,6 @@ function RecipePage() {
                 </Link>
             </header>
             <div className="recipe-page">
-                {/* <button
-                    className="back-button"
-                    onClick={() => navigate(-1)}
-                    style={{
-                        marginBottom: "1rem",
-                        padding: "0.5rem 1rem",
-                        cursor: "pointer",
-                    }}
-                >
-                    ⬅ Back
-                </button> */}
-
                 {/* Title */}
                 <h1 className="recipe-title">
                     {editingTitle ? (
@@ -161,13 +152,13 @@ function RecipePage() {
                         </>
                     ) : (
                         <>
-                            {title}{" "}
+                            {title}
                             <button
                                 className="edit-button"
                                 onClick={() => setEditingTitle(true)}
                             >
                                 <span className="icon">✏️</span>
-                                <span className="label">Edit title</span>
+                                <span className="label">Edit</span>
                             </button>
                         </>
                     )}
@@ -201,13 +192,28 @@ function RecipePage() {
                     {/* Right side: Ingredients */}
                     <div className="ingredients-section">
                         <div className="section-header">
-                            <h3>Ingredients</h3>
+                            <div className="header-left">
+                                <h3>Ingredients</h3>
+                                <button
+                                    className="edit-button"
+                                    onClick={() => setEditingIngredients(true)}
+                                >
+                                    <span className="icon">✏️</span>
+                                    <span className="label">Edit</span>
+                                </button>
+                            </div>
                             <button
-                                className="edit-button"
-                                onClick={() => setEditingIngredients(true)}
+                                className={`conversion-toggle ${
+                                    useMetric ? "metric" : "imperial"
+                                }`}
+                                onClick={() => setUseMetric(!useMetric)}
+                                title={
+                                    useMetric
+                                        ? "Switch to US/Imperial"
+                                        : "Switch to Metric"
+                                }
                             >
-                                <span className="icon">✏️</span>
-                                <span className="label">Edit</span>
+                                {useMetric ? "Metric" : "UK"}
                             </button>
                         </div>
 
@@ -271,7 +277,10 @@ function RecipePage() {
                                                                 : ""
                                                         }
                                                     >
-                                                        {ing}
+                                                        {convertIngredient(
+                                                            ing,
+                                                            useMetric
+                                                        )}
                                                     </span>
                                                 </label>
                                             </li>
@@ -409,18 +418,6 @@ function RecipePage() {
                         </div>
                     )}
                 </section>
-
-                {recipe.source && (
-                    <p className="source-link">
-                        <a
-                            href={recipe.source}
-                            target="_blank"
-                            rel="noreferrer"
-                        >
-                            Original Recipe
-                        </a>
-                    </p>
-                )}
             </div>
         </div>
     );

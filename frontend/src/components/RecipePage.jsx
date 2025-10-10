@@ -179,12 +179,23 @@ function RecipePage() {
                         )}
                         <div className="recipe-meta">
                             {recipe.prep_time && (
-                                <span>
-                                    ⏱️ Prep: {parseTime(recipe.prep_time)}
-                                </span>
+                                <span>⏱️ {parseTime(recipe.prep_time)}</span>
                             )}
                             {recipe.servings && (
                                 <span>🍽️ {parseServings(recipe.servings)}</span>
+                            )}
+                            {recipe.source_url && (
+                                <span>
+                                    🔗{" "}
+                                    <a
+                                        className="original-link"
+                                        href={recipe.source_url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        Original recipe
+                                    </a>
+                                </span>
                             )}
                         </div>
                     </div>
@@ -388,7 +399,7 @@ function RecipePage() {
                             className="add-note-button"
                             onClick={() => setEditingNote(true)}
                         >
-                            Add Note
+                            Add note
                         </button>
                     )}
 

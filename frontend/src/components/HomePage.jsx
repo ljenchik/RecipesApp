@@ -2,18 +2,18 @@ import { useState, useEffect } from "react";
 
 // Components
 import RecipeCard from "./RecipeCard";
-import AddRecipeByUrl from "./AddRecipeByUrl";
+import HomePageHeader from "./HomePageHeader";
 
 // CSS
 import "../css/HomePage.css";
 import "../css/RecipeCard.css";
-import "../css/AddRecipeByUrl.css";
 
 // Assets
 import icon from "../assets/svgs/recipes-app-icon.svg";
 
 function HomePage() {
     const [recipes, setRecipes] = useState([]);
+    const [filteredRecipes, setFilteredRecipes] = useState([]);
 
     const handleDelete = async (id) => {
         try {
@@ -33,6 +33,40 @@ function HomePage() {
             console.error("Error deleting recipe:", error);
             alert("Failed to delete recipe. Please try again.");
         }
+    };
+
+    const handleRecipeAdded = (newRecipe) => {
+        const updated = [...recipes, newRecipe];
+        setRecipes(updated);
+        setFilteredRecipes(updated);
+    };
+
+    const handleSearch = (query) => {
+        if (!query.trim()) {
+            setFilteredRecipes(recipes);
+            return;
+        }
+
+        const lowercaseQuery = query.toLowerCase();
+        const filtered = recipes.filter((recipe) => {
+            // Search in recipe name
+            if (recipe.name?.toLowerCase().includes(lowercaseQuery)) {
+                return true;
+            }
+
+            // Search in ingredients
+            if (
+                recipe.ingredients?.some((ing) =>
+                    ing.toLowerCase().includes(lowercaseQuery)
+                )
+            ) {
+                return true;
+            }
+
+            return false;
+        });
+
+        setFilteredRecipes(filtered);
     };
 
     const fetchRecipes = async () => {
@@ -63,7 +97,10 @@ function HomePage() {
                     />
                     <h1>RecipesApp</h1>
                 </div>
-                <AddRecipeByUrl onRecipeAdded={fetchRecipes} />
+                <HomePageHeader
+                    onRecipeAdded={handleRecipeAdded}
+                    onSearch={handleSearch}
+                />
             </header>
 
             <div className="recipes-wrapper">

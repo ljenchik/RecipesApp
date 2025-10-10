@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "../css/HomePageHeader.css";
 
 function AddRecipeByUrl({ onRecipeAdded }) {
     const [url, setUrl] = useState("");
@@ -52,7 +53,7 @@ function AddRecipeByUrl({ onRecipeAdded }) {
                     {loading ? "Adding..." : "Add recipe"}
                 </button>
             </form>
-            {error && <p style={{ color: "red" }}>{error}</p>}
+            {error && <p>{error}</p>}
         </div>
     );
 }

@@ -1,0 +1,82 @@
+/* Header container */
+.header-controls {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+/* Shared styles for both add-recipe and search-bar */
+.add-recipe,
+.search-bar {
+    flex: 1;
+    max-width: 40%;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.add-recipe form {
+    display: flex;
+    gap: 0.3rem;
+    align-items: center;
+    width: 100%;
+}
+
+/* Shared input styles */
+.add-recipe input,
+.search-bar input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1.5px solid var(--border-color);
+    outline: none;
+    transition: border-color 0.18s ease, border-width 0.18s ease;
+}
+
+.add-recipe input:focus,
+.search-bar input:focus {
+    border-width: 2.5px;
+    border-color: var(--border-color);
+}
+
+/* Shared button base styles */
+.add-recipe button,
+.search-bar button {
+    background-color: var(--background-color);
+    color: var(--main-text-color);
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+}
+
+/* Add recipe button specific */
+.add-recipe button,
+.search-bar button {
+    padding: 5px;
+    white-space: nowrap;
+}
+
+/* Add recipe button specific */
+.add-recipe button:hover,
+.search-bar button:hover {
+    transform: translateY(-2px);
+    font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .header-controls {
+        flex-direction: column;
+    }
+
+    .add-recipe,
+    .search-bar {
+        width: 100%;
+        max-width: 100%;
+    }
+}

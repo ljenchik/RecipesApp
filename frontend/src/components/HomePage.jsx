@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 
 // Components
-import RecipeCard from "./RecipeCard";
 import HomePageHeader from "./HomePageHeader";
+import RecipeCard from "./RecipeCard";
+import CreateRecipeCard from "./CreateRecipeCard";
 
 // CSS
 import "../css/HomePage.css";
@@ -17,7 +18,6 @@ function HomePage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // Fetch all recipes on mount
     useEffect(() => {
         fetchRecipes();
     }, []);
@@ -33,7 +33,7 @@ function HomePage() {
 
             const data = await res.json();
             setRecipes(data);
-            setFilteredRecipes(data); // Initialize filtered recipes
+            setFilteredRecipes(data);
         } catch (err) {
             console.error("Error fetching recipes:", err);
             setError(err.message);
@@ -60,7 +60,6 @@ function HomePage() {
                 );
             }
 
-            // Update both recipes and filtered recipes
             setRecipes((prev) => prev.filter((r) => r.id !== id));
             setFilteredRecipes((prev) => prev.filter((r) => r.id !== id));
 
@@ -82,7 +81,6 @@ function HomePage() {
             .split(/\s+/)
             .filter((word) => word.length > 0);
 
-        // Score each recipe for relevance
         const scoredRecipes = recipes.map((recipe) => {
             const recipeName = (
                 recipe.name ||
@@ -96,27 +94,18 @@ function HomePage() {
             let score = 0;
 
             queryWords.forEach((word) => {
-                // Exact name match: highest score
                 if (recipeName === word) {
                     score += 100;
-                }
-                // Name starts with word: high score
-                else if (recipeName.startsWith(word)) {
+                } else if (recipeName.startsWith(word)) {
                     score += 50;
-                }
-                // Name contains word: medium score
-                else if (recipeName.includes(word)) {
+                } else if (recipeName.includes(word)) {
                     score += 25;
                 }
 
-                // Check each ingredient
                 recipeIngredients.forEach((ingredient) => {
-                    // Ingredient starts with word: good score
                     if (ingredient.startsWith(word)) {
                         score += 10;
-                    }
-                    // Ingredient contains word: lower score
-                    else if (ingredient.includes(word)) {
+                    } else if (ingredient.includes(word)) {
                         score += 5;
                     }
                 });
@@ -125,7 +114,6 @@ function HomePage() {
             return { recipe, score };
         });
 
-        // Filter out recipes with score of 0, sort by score descending
         const filtered = scoredRecipes
             .filter((item) => item.score > 0)
             .sort((a, b) => b.score - a.score)
@@ -134,7 +122,6 @@ function HomePage() {
         setFilteredRecipes(filtered);
     };
 
-    // Loading state
     if (loading) {
         return (
             <div className="loading-container">
@@ -143,7 +130,6 @@ function HomePage() {
         );
     }
 
-    // Error state
     if (error) {
         return (
             <div className="error-container">
@@ -154,23 +140,31 @@ function HomePage() {
     }
 
     return (
-        <div className="home-page">
-            <header>
-                <div className="title-app">
+        <div className="home-page-container">
+            <div className="home-page-header">
+                <div className="home-page-header-title">
                     <img
                         src={icon}
                         alt="Recipes App Icon"
-                        className="app-icon"
+                        className="home-page-header-icon"
                     />
                     <h1>RecipesApp</h1>
                 </div>
+
                 <HomePageHeader
                     onRecipeAdded={handleRecipeAdded}
                     onSearch={handleSearch}
                 />
-            </header>
+            </div>
 
             <main className="recipes-wrapper">
+                {recipes.length !== filteredRecipes.length && (
+                    <div className="search-results-info">
+                        Found {filteredRecipes.length} recipe
+                        {filteredRecipes.length !== 1 ? "s" : ""}
+                    </div>
+                )}
+
                 {filteredRecipes.length === 0 ? (
                     <div className="no-recipes">
                         <p>No recipes found</p>
@@ -180,6 +174,8 @@ function HomePage() {
                     </div>
                 ) : (
                     <div className="recipes-container">
+                        <CreateRecipeCard />
+
                         {filteredRecipes.map((recipe) => (
                             <RecipeCard
                                 key={recipe.id}

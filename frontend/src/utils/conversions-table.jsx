@@ -5,52 +5,89 @@
 
 export const volumeConversions = {
     // UK Volume Measurements → Metric
-    cup: { metric: "ml", ratio: 250, aliases: ["cups", "c"] }, // UK cup = 250ml
+    cup: { metric: "ml", ratio: 250, aliases: ["cups", "c", "Cup", "Cups"] },
     tablespoon: {
         metric: "ml",
-        ratio: 15, // UK tablespoon = 15ml
+        ratio: 15,
         aliases: [
+            "tablespoon",
             "tablespoons",
-            "tbsp",
-            "tbs",
-            "T",
             "Tablespoon",
             "Tablespoons",
+            "tbsp",
+            "Tbsp",
+            "TBSP",
+            "tbs",
+            "Tbs",
+            "T",
         ],
     },
     teaspoon: {
         metric: "ml",
-        ratio: 5, // UK teaspoon = 5ml
-        aliases: ["teaspoons", "tsp", "t"],
+        ratio: 5,
+        aliases: [
+            "teaspoon",
+            "teaspoons",
+            "Teaspoon",
+            "Teaspoons",
+            "tsp",
+            "Tsp",
+            "TSP",
+            "t",
+        ],
     },
     "fluid ounce": {
         metric: "ml",
-        ratio: 28.413, // UK fl oz
-        aliases: ["fluid ounces", "fl oz", "fl. oz.", "floz"],
+        ratio: 28.413,
+        aliases: [
+            "fluid ounce",
+            "fluid ounces",
+            "Fluid Ounce",
+            "Fluid Ounces",
+            "fl oz",
+            "Fl Oz",
+            "fl. oz.",
+            "floz",
+        ],
     },
     pint: {
         metric: "ml",
-        ratio: 568, // UK pint
-        aliases: ["pints", "pt"],
+        ratio: 568,
+        aliases: ["pint", "pints", "Pint", "Pints", "pt", "Pt"],
     },
     quart: {
         metric: "ml",
-        ratio: 1136, // UK quart
-        aliases: ["quarts", "qt"],
+        ratio: 1136,
+        aliases: ["quart", "quarts", "Quart", "Quarts", "qt", "Qt"],
     },
     gallon: {
         metric: "l",
-        ratio: 4.546, // UK gallon
-        aliases: ["gallons", "gal"],
+        ratio: 4.546,
+        aliases: ["gallon", "gallons", "Gallon", "Gallons", "gal", "Gal"],
     },
 };
 
 export const weightConversions = {
-    ounce: { metric: "g", ratio: 28.35, aliases: ["ounces", "oz", "oz."] },
+    ounce: {
+        metric: "g",
+        ratio: 28.35,
+        aliases: ["ounce", "ounces", "Ounce", "Ounces", "oz", "Oz", "oz."],
+    },
     pound: {
         metric: "g",
         ratio: 453.592,
-        aliases: ["pounds", "lb", "lbs", "lb.", "lbs."],
+        aliases: [
+            "pound",
+            "pounds",
+            "Pound",
+            "Pounds",
+            "lb",
+            "Lb",
+            "lbs",
+            "Lbs",
+            "lb.",
+            "lbs.",
+        ],
     },
 };
 
@@ -58,7 +95,15 @@ export const temperatureConversions = {
     fahrenheit: {
         metric: "°C",
         formula: (f) => Math.round(((f - 32) * 5) / 9),
-        aliases: ["°f", "f", "degrees f", "F"],
+        aliases: [
+            "fahrenheit",
+            "Fahrenheit",
+            "°f",
+            "°F",
+            "f",
+            "F",
+            "degrees f",
+        ],
     },
 };
 

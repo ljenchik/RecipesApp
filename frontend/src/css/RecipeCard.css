@@ -59,3 +59,15 @@
 .delete-button:hover {
     font-size: medium;
 }
+
+.create-recipe-button {
+    background: transparent;
+    border: none;
+    color: var(--font-recipe-title);
+    font-size: 1rem;
+}
+
+.create-recipe-button:hover {
+    font-size: 1.1rem;
+    font-weight: 600;
+}

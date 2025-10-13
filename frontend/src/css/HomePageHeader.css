@@ -1,10 +1,11 @@
-/* Header container */
+/* /* ============================================
+   HEADER CONTROLS (Add Recipe + Search)
+   ============================================ */
 .header-controls {
     display: flex;
     flex-direction: row;
     gap: 1rem;
-    align-items: flex-start;
-    justify-content: flex-start;
+    align-items: center;
     flex-wrap: wrap;
 }
 
@@ -12,7 +13,7 @@
 .add-recipe,
 .search-bar {
     flex: 1;
-    max-width: 40%;
+    min-width: 300px;
     display: flex;
     gap: 0.5rem;
     align-items: center;
@@ -51,24 +52,24 @@
     border: none;
     border-radius: 6px;
     cursor: pointer;
+    white-space: nowrap;
     transition: all 0.18s ease;
 }
 
-/* Add recipe button specific */
-.add-recipe button,
-.search-bar button {
-    padding: 5px;
-    white-space: nowrap;
-}
-
-/* Add recipe button specific */
-.add-recipe button:hover,
+.add-recipe button:hover:not(:disabled),
 .search-bar button:hover {
     transform: translateY(-2px);
     font-weight: 600;
 }
 
-/* Responsive */
+.add-recipe button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
 @media (max-width: 768px) {
     .header-controls {
         flex-direction: column;
@@ -77,6 +78,6 @@
     .add-recipe,
     .search-bar {
         width: 100%;
-        max-width: 100%;
+        min-width: auto;
     }
-}
+} */

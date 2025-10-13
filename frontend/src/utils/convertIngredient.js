@@ -1,87 +1,5 @@
 import { findConversion } from "./conversions-table";
-
-const ingredientDensities = {
-    flour: 140,
-    "white whole wheat flour": 140,
-    "plain flour": 140,
-
-    "confectioners sugar": 120,
-    "confectioners' sugar": 120,
-    "confectioner's sugar": 120,
-    "powdered sugar": 120,
-    "icing sugar": 100,
-    "caster sugar": 200,
-    "granulated sugar": 200,
-    "brown sugar": 180,
-    "light brown sugar": 180,
-    "soft light brown sugar": 180,
-    "dark brown sugar": 180,
-    "demerara sugar": 200,
-    sugar: 200,
-
-    "unsweetened cocoa powder": 100,
-    "cocoa powder": 100,
-    cocoa: 100,
-
-    "dark chocolate chips": 180,
-    "milk chocolate chips": 180,
-    "chocolate chips": 180,
-    chocolate: 180,
-
-    "unsalted butter": 240,
-    "salted butter": 240,
-    butter: 240,
-
-    "quick-cooking oats": 100,
-    "rolled oats": 100,
-    oats: 100,
-
-    // Cheese
-    "shredded mozzarella cheese": 112,
-    "shredded mozzarella": 112,
-    "mozzarella cheese": 112,
-    mozzarella: 112,
-    "goat cheese": 150,
-    "crumbled goat cheese": 150,
-    "crumbled feta": 150,
-    "feta cheese": 150,
-    "parmesan cheese": 100,
-    "grated parmesan": 100,
-    "shredded cheddar": 113,
-    "cheddar cheese": 113,
-
-    // Vegetables
-    "cherry tomatoes": 150,
-    "grape tomatoes": 150,
-    tomatoes: 180,
-    "chopped tomatoes": 180,
-    "bell pepper": 150,
-    "bell peppers": 150,
-    "chopped bell pepper": 150,
-    "diced bell pepper": 150,
-    "red bell pepper": 150,
-    "green bell pepper": 150,
-    arugula: 20,
-    "baby arugula": 20,
-    spinach: 30,
-    "baby spinach": 30,
-    kale: 70,
-    "chopped kale": 70,
-
-    walnuts: 120,
-    pecans: 110,
-    raisins: 140,
-};
-
-const liquidDensities = {
-    water: 250,
-    milk: 260,
-    applesauce: 255,
-    honey: 350,
-    oil: 230,
-    "vanilla extract": 210,
-    extract: 210,
-};
+import { ingredientDensities, liquidDensities } from "./ingredient-densities";
 
 function isDryIngredient(ingredientText) {
     const lowerText = ingredientText.toLowerCase();
@@ -93,20 +11,15 @@ function isDryIngredient(ingredientText) {
 
 function getIngredientDensity(ingredientText) {
     const lowerText = ingredientText.toLowerCase();
-
     const cleanedText = lowerText.replace(/['''ʼ`]/g, "");
 
     let bestMatch = null;
     let bestMatchLength = 0;
 
     for (const [ingredient, density] of Object.entries(ingredientDensities)) {
-        const cleanedIngredient = ingredient.replace(/['''’`]/g, "");
+        const cleanedIngredient = ingredient.replace(/['''ʼ`]/g, "");
 
         if (cleanedText.includes(cleanedIngredient)) {
-            console.log(
-                `   ✓ Match: "${ingredient}" (${cleanedIngredient.length} chars) → ${density}g`
-            );
-
             if (cleanedIngredient.length > bestMatchLength) {
                 bestMatch = density;
                 bestMatchLength = cleanedIngredient.length;
@@ -118,13 +31,14 @@ function getIngredientDensity(ingredientText) {
         return bestMatch;
     }
 
+    // Fallback to liquid densities
     for (const [ingredient, density] of Object.entries(liquidDensities)) {
         if (lowerText.includes(ingredient)) {
             return density;
         }
     }
 
-    return 250;
+    return 250; // Default density
 }
 
 function formatNumber(num) {
@@ -143,13 +57,30 @@ function formatNumber(num) {
 
 function handleDualMeasurements(text, useMetric) {
     if (useMetric) {
+        // Remove compound imperial: "600g/1lb 5oz"
+        text = text.replace(/\/\s*(\d+)\s*lb\s+(\d+)\s*oz/gi, "");
+
+        // Remove simple imperial: "100g/3½oz"
         text = text.replace(/\/\s*\d+[¾½¼]?\s*(oz|lb|fl oz|floz)/gi, "");
     } else {
-        const dualPattern =
+        // Handle compound imperial "600g/1lb 5oz"
+        const compoundDualPattern =
+            /(\d+(?:\.\d+)?)\s*(g|kg|ml|l)\s*\/\s*(\d+)\s*lb\s+(\d+)\s*oz/gi;
+
+        text = text.replace(
+            compoundDualPattern,
+            (match, metricNum, metricUnit, lbs, ozs) => {
+                const totalOz = parseInt(lbs) * 16 + parseInt(ozs);
+                return `${totalOz} oz`;
+            }
+        );
+
+        // Handle simple dual "100g/3½oz"
+        const simpleDualPattern =
             /(\d+(?:\.\d+)?)\s*(g|kg|ml|l)\s*\/\s*(\d+[¾½¼]?)\s*(oz|lb|fl oz|floz)/gi;
 
         text = text.replace(
-            dualPattern,
+            simpleDualPattern,
             (match, metricNum, metricUnit, imperialNum, imperialUnit) => {
                 const cleanImperial = imperialNum
                     .replace("¾", ".75")
@@ -209,8 +140,9 @@ export const convertIngredient = (ingredient, useMetric) => {
     converted = handleStandaloneMetric(converted, useMetric);
     converted = converted.replace(/\s*\([^)]*\)/g, "");
 
+    // Temperature conversion - with word boundary
     converted = converted.replace(
-        /(\d+)\s*°?\s*F(?:ahrenheit)?/gi,
+        /(\d+)\s*°?\s*F(?:ahrenheit)?\b/gi,
         (match, temp) => {
             const celsius = Math.round(((parseInt(temp) - 32) * 5) / 9);
             return `${celsius}°C`;
@@ -221,7 +153,59 @@ export const convertIngredient = (ingredient, useMetric) => {
         return converted.trim();
     }
 
-    // Convert measurements, but SKIP teaspoons and tablespoons
+    // Special case: Convert tbsp/tsp ONLY for butter
+    const lowerIngredient = ingredient.toLowerCase();
+    const shouldConvertSmallVolumes = lowerIngredient.includes("butter");
+
+    if (shouldConvertSmallVolumes) {
+        // Convert tbsp/tsp ONLY for butter
+        const smallVolumePattern = new RegExp(
+            // Pattern 1: "1 1/4 tbsp"
+            "(\\d+)\\s+(?:and\\s+)?(\\d+)\\s*\\/\\s*(\\d+)\\s+(tablespoon|tablespoons|Tablespoon|Tablespoons|tbsp|Tbsp|TBSP|tbs|Tbs|T|teaspoon|teaspoons|Teaspoon|Teaspoons|tsp|Tsp|TSP|t)\\b" +
+                "|" +
+                // Pattern 2: "1/4 tbsp"
+                "(\\d+)\\s*\\/\\s*(\\d+)\\s+(tablespoon|tablespoons|Tablespoon|Tablespoons|tbsp|Tbsp|TBSP|tbs|Tbs|T|teaspoon|teaspoons|Teaspoon|Teaspoons|tsp|Tsp|TSP|t)\\b" +
+                "|" +
+                // Pattern 3: "2 tbsp"
+                "(\\d+(?:\\.\\d+)?)\\s+(tablespoon|tablespoons|Tablespoon|Tablespoons|tbsp|Tbsp|TBSP|tbs|Tbs|T|teaspoon|teaspoons|Teaspoon|Teaspoons|tsp|Tsp|TSP|t)\\b",
+            "gi"
+        );
+
+        converted = converted.replace(
+            smallVolumePattern,
+            (match, ...groups) => {
+                let amount, unit;
+
+                if (groups[0] !== undefined) {
+                    const whole = parseInt(groups[0]);
+                    const numerator = parseInt(groups[1]);
+                    const denominator = parseInt(groups[2]);
+                    amount = whole + numerator / denominator;
+                    unit = groups[3];
+                } else if (groups[4] !== undefined) {
+                    const numerator = parseInt(groups[4]);
+                    const denominator = parseInt(groups[5]);
+                    amount = numerator / denominator;
+                    unit = groups[6];
+                } else if (groups[7] !== undefined) {
+                    amount = parseFloat(groups[7]);
+                    unit = groups[8];
+                } else {
+                    return match;
+                }
+
+                const conversion = findConversion(unit);
+                if (!conversion) return match;
+
+                const density = getIngredientDensity(ingredient);
+                const grams = amount * density;
+                const formatted = formatNumber(grams);
+                return `${formatted} g`;
+            }
+        );
+    }
+
+    // Convert measurements (cups, oz, lb) - SKIP tsp/tbsp for non-butter ingredients
     const measurementPattern = new RegExp(
         // Pattern 1: "1 1/4 cups" or "1 and 1/4 cups"
         "(\\d+)\\s+(?:and\\s+)?(\\d+)\\s*\\/\\s*(\\d+)\\s+(cup|cups|ounce|ounces|oz|pound|pounds|lb|lbs)\\b" +

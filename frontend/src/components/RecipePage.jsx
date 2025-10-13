@@ -517,7 +517,7 @@ function RecipePage() {
                         )}
                     </div>
                 </div>
-                {/* Instructions */}
+                {/* Instructions Section */}
                 <section className="instructions-section">
                     <div className="section-header">
                         <div className="header-left">
@@ -541,6 +541,7 @@ function RecipePage() {
                                     setInstructions(e.target.value)
                                 }
                                 placeholder="Enter instructions..."
+                                autoFocus
                             />
                             <div className="edit-buttons">
                                 <button
@@ -557,10 +558,7 @@ function RecipePage() {
                                 </button>
                                 <button
                                     className="tick-cross-buttons cancel-btn"
-                                    onClick={() => {
-                                        setInstructions(recipe.instructions);
-                                        setEditingInstructions(false);
-                                    }}
+                                    onClick={() => cancelEdit("instructions")}
                                 >
                                     ❌
                                 </button>
@@ -568,22 +566,36 @@ function RecipePage() {
                         </div>
                     ) : (
                         <div className="instructions-content">
-                            {formatInstructions(instructions).map(
-                                (step, idx) =>
-                                    step.trim() && (
-                                        <div
-                                            key={idx}
-                                            className="instruction-step"
-                                        >
-                                            <span className="step-number">
-                                                {idx + 1}.
-                                            </span>
-                                            <div className="step-text">
-                                                {step}
+                            {(() => {
+                                const steps = formatInstructions(instructions);
+
+                                // Single instruction - display as paragraph without numbering
+                                if (steps.length === 1) {
+                                    return (
+                                        <p className="single-instruction">
+                                            {steps[0]}
+                                        </p>
+                                    );
+                                }
+
+                                // Multiple instructions - display with numbering
+                                return steps.map(
+                                    (step, idx) =>
+                                        step.trim() && (
+                                            <div
+                                                key={idx}
+                                                className="instruction-step"
+                                            >
+                                                <span className="step-number">
+                                                    {idx + 1}.
+                                                </span>
+                                                <div className="step-text">
+                                                    {step}
+                                                </div>
                                             </div>
-                                        </div>
-                                    )
-                            )}
+                                        )
+                                );
+                            })()}
                         </div>
                     )}
                 </section>

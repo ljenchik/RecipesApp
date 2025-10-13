@@ -132,6 +132,65 @@ header {
     font-size: 0.9rem;
 }
 
+.option {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.upload-button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: var(--background-color);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: var(--main-text-color);
+}
+
+.upload-button:hover {
+    background: transparent;
+    border-width: 2px;
+    font-weight: 600;
+}
+
+.upload-button:active {
+    transform: scale(0.98);
+}
+
+.upload-button .icon {
+    font-size: 1.2rem;
+}
+
+/* When disabled (URL is entered) */
+.upload-button:has(input:disabled) {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.clear-file-button {
+    align-self: flex-start;
+    padding: 0.5rem 1rem;
+    background: none;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    color: #6b7280;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.clear-file-button:hover {
+    background: #fee;
+    border-color: #ef4444;
+    color: #ef4444;
+}
+
 /* ============================================
    RESPONSIVE DESIGN
    ============================================ */

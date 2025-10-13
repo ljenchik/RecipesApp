@@ -16,6 +16,10 @@ function RecipePage() {
     const [editingIngredients, setEditingIngredients] = useState(false);
     const [editingInstructions, setEditingInstructions] = useState(false);
     const [editingNote, setEditingNote] = useState(false);
+    const [updateImage, setUpdateImage] = useState(false);
+    const [newImageUrl, setNewImageUrl] = useState("");
+    const [imageFile, setImageFile] = useState(null);
+    const [uploadingImage, setUploadingImage] = useState(false);
 
     const [title, setTitle] = useState("");
     const [ingredients, setIngredients] = useState("");
@@ -103,6 +107,49 @@ function RecipePage() {
         setCheckedItems((prev) => ({ ...prev, [ing]: !prev[ing] }));
     };
 
+    const handleImageUpdate = async () => {
+        try {
+            setUploadingImage(true);
+
+            let finalImageUrl = newImageUrl;
+
+            // Update recipe with new image URL
+            const res = await fetch(`/recipes/${id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ image_url: finalImageUrl }),
+            });
+
+            if (res.ok) {
+                const updated = await res.json();
+                setRecipe(updated);
+                setUpdateImage(false);
+                setNewImageUrl("");
+                setImageFile(null);
+            } else {
+                alert("Failed to update image");
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Error updating image");
+        } finally {
+            setUploadingImage(false);
+        }
+    };
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            // Validate file size (max 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert("Image size must be less than 5MB");
+                return;
+            }
+            setImageFile(file);
+            setNewImageUrl("");
+        }
+    };
+
     if (!recipe) return <p>Loading...</p>;
 
     return (
@@ -163,7 +210,6 @@ function RecipePage() {
                         </>
                     )}
                 </h1>
-
                 {/* Image + Ingredients row */}
                 <div className="image-ingredients-row">
                     <div>
@@ -184,6 +230,83 @@ function RecipePage() {
                                 </button>
                             </div>
                         )}
+
+                        {/* Image Update Modal */}
+                        {updateImage && (
+                            <div className="image-update-modal">
+                                <div className="modal-content">
+                                    <div className="option">
+                                        <label
+                                            htmlFor="image-upload"
+                                            className="upload-button"
+                                        >
+                                            {imageFile ? (
+                                                <>
+                                                    <span className="icon">
+                                                        ✅
+                                                    </span>
+                                                    <span>
+                                                        {imageFile.name}
+                                                    </span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <span>
+                                                        Upload new image
+                                                    </span>
+                                                </>
+                                            )}
+                                        </label>
+                                        <input
+                                            id="image-upload"
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={handleFileChange}
+                                            disabled={newImageUrl !== ""}
+                                            style={{ display: "none" }}
+                                        />
+                                        {imageFile && (
+                                            <button
+                                                className="clear-file-button"
+                                                onClick={() =>
+                                                    setImageFile(null)
+                                                }
+                                                type="button"
+                                            >
+                                                ✕ Clear
+                                            </button>
+                                        )}
+                                    </div>
+
+                                    <div className="modal-buttons">
+                                        <button
+                                            className="tick-cross-buttons save-btn"
+                                            onClick={handleImageUpdate}
+                                            disabled={
+                                                uploadingImage ||
+                                                (!newImageUrl && !imageFile)
+                                            }
+                                        >
+                                            {uploadingImage
+                                                ? "Uploading..."
+                                                : "✅"}
+                                        </button>
+                                        <button
+                                            className="tick-cross-buttons cancel-btn"
+                                            onClick={() => {
+                                                setUpdateImage(false);
+                                                setNewImageUrl("");
+                                                setImageFile(null);
+                                            }}
+                                            disabled={uploadingImage}
+                                        >
+                                            ❌
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
                         <div className="recipe-meta">
                             {recipe.prep_time && (
                                 <span>⏱️ {parseTime(recipe.prep_time)}</span>
@@ -318,7 +441,6 @@ function RecipePage() {
                         )}
                     </div>
                 </div>
-
                 {/* Instructions */}
                 <section className="instructions-section">
                     <div className="section-header">
@@ -389,7 +511,6 @@ function RecipePage() {
                         </div>
                     )}
                 </section>
-
                 {/* Notes */}
                 <section className="notes-section">
                     <div className="section-header">

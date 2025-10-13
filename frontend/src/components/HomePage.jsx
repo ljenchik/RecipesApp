@@ -78,29 +78,58 @@ function HomePage() {
         }
 
         const lowercaseQuery = query.toLowerCase();
+        const queryWords = lowercaseQuery
+            .split(/\s+/)
+            .filter((word) => word.length > 0);
 
-        const filtered = recipes.filter((recipe) => {
-            // Search in recipe name
-            if (recipe.name?.toLowerCase().includes(lowercaseQuery)) {
-                return true;
-            }
+        // Score each recipe for relevance
+        const scoredRecipes = recipes.map((recipe) => {
+            const recipeName = (
+                recipe.name ||
+                recipe.title ||
+                ""
+            ).toLowerCase();
+            const recipeIngredients = (recipe.ingredients || []).map((ing) =>
+                ing.toLowerCase()
+            );
 
-            // Search in ingredients
-            if (
-                recipe.ingredients?.some((ingredient) =>
-                    ingredient.toLowerCase().includes(lowercaseQuery)
-                )
-            ) {
-                return true;
-            }
+            let score = 0;
 
-            // Search in instructions
-            if (recipe.instructions?.toLowerCase().includes(lowercaseQuery)) {
-                return true;
-            }
+            queryWords.forEach((word) => {
+                // Exact name match: highest score
+                if (recipeName === word) {
+                    score += 100;
+                }
+                // Name starts with word: high score
+                else if (recipeName.startsWith(word)) {
+                    score += 50;
+                }
+                // Name contains word: medium score
+                else if (recipeName.includes(word)) {
+                    score += 25;
+                }
 
-            return false;
+                // Check each ingredient
+                recipeIngredients.forEach((ingredient) => {
+                    // Ingredient starts with word: good score
+                    if (ingredient.startsWith(word)) {
+                        score += 10;
+                    }
+                    // Ingredient contains word: lower score
+                    else if (ingredient.includes(word)) {
+                        score += 5;
+                    }
+                });
+            });
+
+            return { recipe, score };
         });
+
+        // Filter out recipes with score of 0, sort by score descending
+        const filtered = scoredRecipes
+            .filter((item) => item.score > 0)
+            .sort((a, b) => b.score - a.score)
+            .map((item) => item.recipe);
 
         setFilteredRecipes(filtered);
     };

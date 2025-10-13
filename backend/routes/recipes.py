@@ -4,7 +4,21 @@ import requests
 from models.models import db, Recipe
 from utils.helpers import is_valid_url, detect_encoding, generic_parse
 
+import os
+from werkzeug.utils import secure_filename
+import uuid
+from datetime import datetime
+
 recipes_bp = Blueprint('recipes', __name__)
+
+# Configure upload settings at the top of your file
+UPLOAD_FOLDER = 'uploads/recipe-images'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
+MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
+
+# Create upload directory if it doesn't exist
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
 
 # Get all recipes
 @recipes_bp.route('', methods=['GET'])
@@ -67,31 +81,41 @@ def get_recipe(recipe_id):
         return jsonify(recipe.to_dict()), 200
     return jsonify({"error": "Recipe not found"}), 404
 
-# Update recipe
 @recipes_bp.route('/<int:recipe_id>', methods=['PUT'])
 def update_recipe(recipe_id):
     try:
-        data = request.get_json()
         recipe = Recipe.query.get(recipe_id)
-        
         if not recipe:
             return jsonify({"error": "Recipe not found"}), 404
         
-        # Update fields if provided
+        data = request.get_json()
+        
+        # Update all possible fields
         if 'title' in data:
             recipe.title = data['title']
         if 'ingredients' in data:
             recipe.ingredients = data['ingredients']
         if 'instructions' in data:
             recipe.instructions = data['instructions']
+        if 'image_url' in data:
+            recipe.image_url = data['image_url']
         if 'notes' in data:
             recipe.notes = data['notes']
+        if 'prep_time' in data:
+            recipe.prep_time = data['prep_time']
+        if 'servings' in data:
+            recipe.servings = data['servings']
         
         db.session.commit()
+        
+        print(f"✓ Updated recipe: {recipe.title}")
         return jsonify(recipe.to_dict()), 200
         
     except Exception as e:
         db.session.rollback()
+        print(f"✗ Update error: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return jsonify({"error": str(e)}), 500
 
 # Update recipe notes
@@ -209,3 +233,62 @@ def parse_and_save():
         import traceback
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
+    
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+# Upload image endpoint
+@recipes_bp.route('/<int:recipe_id>/upload-image', methods=['POST'])
+def upload_recipe_image(recipe_id):
+    try:
+        # Check if recipe exists
+        recipe = Recipe.query.get(recipe_id)
+        if not recipe:
+            return jsonify({"error": "Recipe not found"}), 404
+        
+        # Check if file is in request
+        if 'image' not in request.files:
+            return jsonify({"error": "No image file provided"}), 400
+        
+        file = request.files['image']
+        
+        # Check if file is selected
+        if file.filename == '':
+            return jsonify({"error": "No file selected"}), 400
+        
+        # Validate file type
+        if not allowed_file(file.filename):
+            return jsonify({
+                "error": "Invalid file type. Allowed: png, jpg, jpeg, gif, webp"
+            }), 400
+        
+        # Validate file size
+        file.seek(0, os.SEEK_END)
+        file_size = file.tell()
+        file.seek(0)
+        
+        if file_size > MAX_FILE_SIZE:
+            return jsonify({"error": "File size must be less than 5MB"}), 400
+        
+        # Generate unique filename
+        file_extension = secure_filename(file.filename).rsplit('.', 1)[1].lower()
+        unique_filename = f"{uuid.uuid4().hex}-{int(datetime.now().timestamp())}.{file_extension}"
+        
+        # Save file
+        file_path = os.path.join(UPLOAD_FOLDER, unique_filename)
+        file.save(file_path)
+        
+        # Return FULL URL
+        image_url = f"http://localhost:5000/uploads/recipe-images/{unique_filename}"
+        
+        print(f"✓ Image uploaded: {image_url}")
+        return jsonify({"imageUrl": image_url}), 200
+        
+    except Exception as e:
+        print(f"✗ Upload error: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": "Failed to upload image"}), 500
+

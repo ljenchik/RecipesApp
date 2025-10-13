@@ -1,13 +1,13 @@
-from flask import Flask, jsonify
+from flask import Flask, send_from_directory
 from flask_cors import CORS
 from models.models import db
 from db.db_config import DB_CONFIG
+import os
 
 # Import blueprints
 from routes.test_db import test_db_connection
 from routes.recipes import recipes_bp
 from routes.users import users_bp
-
 
 app = Flask(__name__)
 CORS(app)
@@ -18,6 +18,12 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize database
 db.init_app(app)
+
+# Serve uploaded images
+@app.route('/uploads/<path:filename>')
+def serve_uploaded_file(filename):
+    uploads_dir = os.path.join(os.path.dirname(__file__), 'uploads')
+    return send_from_directory(uploads_dir, filename)
 
 # Register blueprints
 app.register_blueprint(test_db_connection, url_prefix='/test-db')

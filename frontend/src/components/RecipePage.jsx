@@ -110,10 +110,36 @@ function RecipePage() {
     const handleImageUpdate = async () => {
         try {
             setUploadingImage(true);
+            let finalImageUrl = "";
 
-            let finalImageUrl = newImageUrl;
+            // If user uploaded a file, upload it first
+            if (imageFile) {
+                const formData = new FormData();
+                formData.append("image", imageFile);
 
-            // Update recipe with new image URL
+                const uploadRes = await fetch(`/recipes/${id}/upload-image`, {
+                    method: "POST",
+                    body: formData,
+                });
+
+                if (!uploadRes.ok) {
+                    throw new Error("Failed to upload image");
+                }
+
+                const { imageUrl: uploadedUrl } = await uploadRes.json();
+                finalImageUrl = uploadedUrl;
+            }
+            // Otherwise use the URL they entered
+            else if (newImageUrl.trim()) {
+                finalImageUrl = newImageUrl;
+            }
+
+            if (!finalImageUrl) {
+                alert("Please provide an image URL or upload a file");
+                return;
+            }
+
+            // Update recipe with the image URL
             const res = await fetch(`/recipes/${id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
@@ -126,12 +152,13 @@ function RecipePage() {
                 setUpdateImage(false);
                 setNewImageUrl("");
                 setImageFile(null);
+                alert("Image updated successfully!");
             } else {
                 alert("Failed to update image");
             }
         } catch (err) {
-            console.error(err);
-            alert("Error updating image");
+            console.error("Error updating image:", err);
+            alert("Error updating image: " + err.message);
         } finally {
             setUploadingImage(false);
         }
@@ -140,7 +167,10 @@ function RecipePage() {
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            // Validate file size (max 5MB)
+            if (!file.type.startsWith("image/")) {
+                alert("Please select an image file");
+                return;
+            }
             if (file.size > 5 * 1024 * 1024) {
                 alert("Image size must be less than 5MB");
                 return;
@@ -212,7 +242,7 @@ function RecipePage() {
                 </h1>
                 {/* Image + Ingredients row */}
                 <div className="image-ingredients-row">
-                    <div>
+                    <div className="image-meta-container">
                         {/* Left side: Image */}
                         {recipe.image_url && (
                             <div className="image-container">
@@ -231,11 +261,62 @@ function RecipePage() {
                             </div>
                         )}
 
-                        {/* Image Update Modal */}
+                        {!updateImage && (
+                            <div className="recipe-meta">
+                                {recipe.prep_time && (
+                                    <span>
+                                        ⏱️ {parseTime(recipe.prep_time)}
+                                    </span>
+                                )}
+                                {recipe.servings && (
+                                    <span>
+                                        🍽️ {parseServings(recipe.servings)}
+                                    </span>
+                                )}
+                                {recipe.source_url && (
+                                    <span>
+                                        🫕{" "}
+                                        <a
+                                            className="original-link"
+                                            href={recipe.source_url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            Original recipe
+                                        </a>
+                                    </span>
+                                )}
+                            </div>
+                        )}
+
                         {updateImage && (
                             <div className="image-update-modal">
                                 <div className="modal-content">
-                                    <div className="option">
+                                    <h3>Update Recipe Image</h3>
+
+                                    {/* Option 1: Image URL */}
+                                    <div className="upload-option">
+                                        <label className="option-label">
+                                            Image URL
+                                        </label>
+                                        <input
+                                            type="url"
+                                            placeholder="https://example.com/image.jpg"
+                                            value={newImageUrl}
+                                            onChange={(e) => {
+                                                setNewImageUrl(e.target.value);
+                                                setImageFile(null); // Clear file if URL is entered
+                                            }}
+                                            className="url-input"
+                                            disabled={imageFile !== null}
+                                        />
+                                    </div>
+
+                                    {/* Option 2: Upload from computer */}
+                                    <div className="upload-option">
+                                        <label className="option-label">
+                                            Upload from computer
+                                        </label>
                                         <label
                                             htmlFor="image-upload"
                                             className="upload-button"
@@ -251,9 +332,10 @@ function RecipePage() {
                                                 </>
                                             ) : (
                                                 <>
-                                                    <span>
-                                                        Upload new image
+                                                    <span className="icon">
+                                                        📁
                                                     </span>
+                                                    <span>Choose file</span>
                                                 </>
                                             )}
                                         </label>
@@ -262,43 +344,59 @@ function RecipePage() {
                                             type="file"
                                             accept="image/*"
                                             onChange={handleFileChange}
-                                            disabled={newImageUrl !== ""}
                                             style={{ display: "none" }}
+                                            disabled={newImageUrl.trim() !== ""}
                                         />
-                                        {imageFile && (
-                                            <button
-                                                className="clear-file-button"
-                                                onClick={() =>
-                                                    setImageFile(null)
-                                                }
-                                                type="button"
-                                            >
-                                                ✕ Clear
-                                            </button>
-                                        )}
                                     </div>
 
+                                    {/* Image Preview */}
+                                    {(newImageUrl || imageFile) && (
+                                        <div className="image-preview">
+                                            <p>Preview:</p>
+                                            <img
+                                                src={
+                                                    imageFile
+                                                        ? URL.createObjectURL(
+                                                              imageFile
+                                                          )
+                                                        : newImageUrl
+                                                }
+                                                alt="Preview"
+                                                onError={(e) => {
+                                                    e.target.style.display =
+                                                        "none";
+                                                }}
+                                                onLoad={(e) => {
+                                                    e.target.style.display =
+                                                        "block";
+                                                }}
+                                            />
+                                        </div>
+                                    )}
+
+                                    {/* Action buttons */}
                                     <div className="modal-buttons">
                                         <button
                                             className="tick-cross-buttons save-btn"
                                             onClick={handleImageUpdate}
                                             disabled={
                                                 uploadingImage ||
-                                                (!newImageUrl && !imageFile)
+                                                (!newImageUrl.trim() &&
+                                                    !imageFile)
                                             }
+                                            title="Save image"
                                         >
-                                            {uploadingImage
-                                                ? "Uploading..."
-                                                : "✅"}
+                                            {uploadingImage ? "⏳" : "✅"}
                                         </button>
                                         <button
                                             className="tick-cross-buttons cancel-btn"
                                             onClick={() => {
                                                 setUpdateImage(false);
-                                                setNewImageUrl("");
                                                 setImageFile(null);
+                                                setNewImageUrl("");
                                             }}
                                             disabled={uploadingImage}
+                                            title="Cancel"
                                         >
                                             ❌
                                         </button>
@@ -306,28 +404,6 @@ function RecipePage() {
                                 </div>
                             </div>
                         )}
-
-                        <div className="recipe-meta">
-                            {recipe.prep_time && (
-                                <span>⏱️ {parseTime(recipe.prep_time)}</span>
-                            )}
-                            {recipe.servings && (
-                                <span>🍽️ {parseServings(recipe.servings)}</span>
-                            )}
-                            {recipe.source_url && (
-                                <span>
-                                    🫕{" "}
-                                    <a
-                                        className="original-link"
-                                        href={recipe.source_url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        Original recipe
-                                    </a>
-                                </span>
-                            )}
-                        </div>
                     </div>
 
                     {/* Right side: Ingredients */}

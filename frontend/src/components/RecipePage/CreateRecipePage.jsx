@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import icon from "../assets/svgs/recipes-app-icon.svg";
+import icon from "../../assets/svgs/recipes-app-icon.svg";
 
 function CreateRecipePage() {
     return (

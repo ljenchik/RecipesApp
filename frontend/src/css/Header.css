@@ -1,5 +1,52 @@
-/* /* ============================================
-   HEADER CONTROLS (Add Recipe + Search)
+/* ============================================
+   HEADER
+   ============================================ */
+.header {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    max-width: var(--max-container-width);
+    padding: 1rem;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+/* Logo Link */
+.logo-link {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    width: fit-content;
+}
+
+.logo-link:hover {
+    transform: translateY(-2px);
+    opacity: 0.8;
+}
+
+.logo-link:active {
+    transform: translateY(0);
+}
+
+.logo-icon {
+    width: 40px;
+    height: 40px;
+}
+
+.logo-link h1 {
+    margin: 0;
+    color: var(--heading-color);
+    font-family: "cookie";
+    font-size: 30pt;
+}
+
+/* ============================================
+   HEADER CONTROLS - Add Recipe and Search bar
    ============================================ */
 .header-controls {
     display: flex;
@@ -80,4 +127,8 @@
         width: 100%;
         min-width: auto;
     }
-} */
+
+    .logo-link h1 {
+        font-size: 24pt;
+    }
+}

@@ -1,10 +1,14 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 
-import "../css/RecipePage.css";
-import { parseTime, parseServings, formatInstructions } from "../utils/helpers";
-import { convertIngredient } from "../utils/convertIngredient";
-import icon from "../assets/svgs/recipes-app-icon.svg";
+import LogoAndName from "../Header/LogoAndName";
+import "../../css/RecipePage.css";
+import {
+    parseTime,
+    parseServings,
+    formatInstructions,
+} from "../../utils/helpers";
+import { convertIngredient } from "../../utils/convertIngredient";
 
 function RecipePage() {
     const { id } = useParams();
@@ -184,21 +188,7 @@ function RecipePage() {
 
     return (
         <div>
-            <header>
-                <Link to="/" className="title-app-link">
-                    <div className="title-app">
-                        <img
-                            src={icon}
-                            alt="Recipes App Icon"
-                            style={{
-                                width: "40px",
-                                height: "40px",
-                            }}
-                        />
-                        <h1>RecipesApp</h1>
-                    </div>
-                </Link>
-            </header>
+            <LogoAndName />
             <div className="recipe-page">
                 {/* Title */}
                 <h1 className="recipe-title">

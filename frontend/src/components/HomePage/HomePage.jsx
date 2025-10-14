@@ -1,16 +1,14 @@
 import { useState, useEffect } from "react";
 
 // Components
-import HomePageHeader from "./HomePageHeader";
+import Header from "../Header/Header";
 import RecipeCard from "./RecipeCard";
 import CreateRecipeCard from "./CreateRecipeCard";
 
 // CSS
-import "../css/HomePage.css";
-import "../css/RecipeCard.css";
-
-// Assets
-import icon from "../assets/svgs/recipes-app-icon.svg";
+import "../../css/HomePage.css";
+import "../../css/Header.css";
+import "../../css/RecipeCard.css";
 
 function HomePage() {
     const [recipes, setRecipes] = useState([]);
@@ -141,21 +139,7 @@ function HomePage() {
 
     return (
         <div className="home-page-container">
-            <div className="home-page-header">
-                <div className="home-page-header-title">
-                    <img
-                        src={icon}
-                        alt="Recipes App Icon"
-                        className="home-page-header-icon"
-                    />
-                    <h1>RecipesApp</h1>
-                </div>
-
-                <HomePageHeader
-                    onRecipeAdded={handleRecipeAdded}
-                    onSearch={handleSearch}
-                />
-            </div>
+            <Header />
 
             <main className="recipes-wrapper">
                 {recipes.length !== filteredRecipes.length && (

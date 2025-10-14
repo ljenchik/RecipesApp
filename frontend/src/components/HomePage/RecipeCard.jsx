@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { parseTime } from "../utils/helpers";
+import { parseTime } from "../../utils/helpers";
 
 function RecipeCard({ recipe, onDelete }) {
     const navigate = useNavigate();

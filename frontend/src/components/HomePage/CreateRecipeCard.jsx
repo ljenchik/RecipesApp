@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import "../css/RecipeCard.css";
-import icon from "../assets/svgs/recipes-app-icon.svg";
+import "../../css/RecipeCard.css";
+import icon from "../../assets/svgs/recipes-app-icon.svg";
 
 function CreateRecipeCard() {
     const navigate = useNavigate();

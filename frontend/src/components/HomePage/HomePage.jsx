@@ -40,12 +40,6 @@ function HomePage() {
         }
     };
 
-    const handleRecipeAdded = (newRecipe) => {
-        const updated = [...recipes, newRecipe];
-        setRecipes(updated);
-        setFilteredRecipes(updated);
-    };
-
     const handleDelete = async (id) => {
         try {
             const response = await fetch(`/recipes/${id}`, {
@@ -66,58 +60,6 @@ function HomePage() {
             console.error("Error deleting recipe:", error);
             alert("Failed to delete recipe. Please try again.");
         }
-    };
-
-    const handleSearch = (query) => {
-        if (!query.trim()) {
-            setFilteredRecipes(recipes);
-            return;
-        }
-
-        const lowercaseQuery = query.toLowerCase();
-        const queryWords = lowercaseQuery
-            .split(/\s+/)
-            .filter((word) => word.length > 0);
-
-        const scoredRecipes = recipes.map((recipe) => {
-            const recipeName = (
-                recipe.name ||
-                recipe.title ||
-                ""
-            ).toLowerCase();
-            const recipeIngredients = (recipe.ingredients || []).map((ing) =>
-                ing.toLowerCase()
-            );
-
-            let score = 0;
-
-            queryWords.forEach((word) => {
-                if (recipeName === word) {
-                    score += 100;
-                } else if (recipeName.startsWith(word)) {
-                    score += 50;
-                } else if (recipeName.includes(word)) {
-                    score += 25;
-                }
-
-                recipeIngredients.forEach((ingredient) => {
-                    if (ingredient.startsWith(word)) {
-                        score += 10;
-                    } else if (ingredient.includes(word)) {
-                        score += 5;
-                    }
-                });
-            });
-
-            return { recipe, score };
-        });
-
-        const filtered = scoredRecipes
-            .filter((item) => item.score > 0)
-            .sort((a, b) => b.score - a.score)
-            .map((item) => item.recipe);
-
-        setFilteredRecipes(filtered);
     };
 
     if (loading) {

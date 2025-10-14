@@ -56,7 +56,6 @@ def create_recipe():
             ingredients=data.get('ingredients', []),
             instructions=data.get('instructions'),
             prep_time=data.get('prepTime'),
-            cook_time=data.get('cookTime'),
             servings=data.get('servings'),
             image_url=data.get('imageUrl'),
             host=data.get('host'),

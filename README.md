@@ -12,6 +12,13 @@ A modern, handy, feature-rich recipe management application that helps you organ
 -   [Contributing](#-contributing)
 -   [License](#-license)
 
+## 🖼️ Screenshots
+
+<img src="frontend/public/app-home-page.png" alt="App Screenshot" width="300"/>
+<img src="frontend/public/recipe-page.png" alt="App Screenshot" width="300"/>
+<img src="frontend/public/recipe-page-editing.png" alt="App Screenshot" width="300"/>
+<img src="frontend/public/create-recipe.png" alt="App Screenshot" width="300"/>
+
 ## ⚡ Quick Start
 
 ```bash

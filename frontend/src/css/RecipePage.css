@@ -1,43 +1,6 @@
-/* ========== GLOBAL STYLES ========== */
-
-/* Title app link */
-.title-app-link {
-    text-decoration: none;
-}
-
-.title-app {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 0;
-    cursor: pointer;
-    transition: transform 0.2s ease, opacity 0.2s ease;
-}
-
-.title-app:hover {
-    transform: translateY(-2px);
-    opacity: 0.8;
-}
-
-.title-app:active {
-    transform: translateY(0);
-}
-
-/* Back button */
-.back-button {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    margin: 0;
-    padding: 0;
-    transition: all 0.2s ease;
-}
-
-.back-button:hover {
-    transform: scale(1.1) translateY(-2px);
-}
-
-/* ========== RECIPE PAGE LAYOUT ========== */
+/* ============================================
+   RECIPE PAGE
+   ============================================ */
 
 .recipe-page {
     max-width: 900px;
@@ -45,7 +8,9 @@
     padding: 1rem;
 }
 
-/* Recipe title */
+/* ============================================
+   RECIPE TITLE
+   ============================================ */
 .recipe-title {
     display: flex;
     align-items: center;
@@ -72,9 +37,9 @@
     outline: none;
 }
 
-/* ========== BUTTONS ========== */
-
-/* Edit button */
+/* ============================================
+   EDIT BUTTON - pencil
+   ============================================ */
 .edit-button {
     display: inline-flex;
     align-items: center;
@@ -113,7 +78,9 @@
     transform: translateX(0);
 }
 
-/* Tick and cross buttons */
+/* ============================================
+   TICK and CROSS BUTTONS
+   ============================================ */
 .tick-cross-buttons {
     border: none;
     margin: 0;
@@ -127,7 +94,9 @@
     transform: scale(1.1) translateY(-2px);
 }
 
-/* ========== IMAGE + INGREDIENTS SECTION ========== */
+/* ============================================
+  IMAGE and INGREDIENTS ROW
+   ============================================ */
 
 .image-ingredients-row {
     width: 100%;
@@ -138,7 +107,9 @@
     max-width: 900px;
 }
 
-/* Image container */
+/* ============================================
+  IMAGE CONTAINER
+   ============================================ */
 .image-container {
     width: 100%;
     position: relative;
@@ -179,7 +150,9 @@
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* Recipe meta info */
+/* ============================================
+  META CONTAINER
+   ============================================ */
 .recipe-meta {
     display: flex;
     gap: 0.6rem;
@@ -206,8 +179,9 @@
     font-weight: 600;
 }
 
-/* ========== IMAGE UPDATE MODAL ========== */
-
+/* ============================================
+  IMAGE UPDATE MODE
+   ============================================ */
 .image-update-modal {
     position: fixed;
     top: 0;
@@ -225,8 +199,8 @@
     background: var(--background-color);
     padding: 1rem;
     border-radius: 12px;
-    max-width: 400px;
-    width: 70%;
+    max-width: 350px;
+    width: 75%;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
 }
 
@@ -291,6 +265,9 @@
     flex-shrink: 0;
 }
 
+/* ============================================
+  IMAGE PREVIEW
+   ============================================ */
 .image-preview {
     margin-top: 1rem;
     padding-top: 1rem;
@@ -310,11 +287,14 @@
     display: block;
 }
 
+/* ============================================
+  TICK and CROSS - action buttons
+   ============================================ */
 .modal-buttons {
     display: flex;
     gap: 0.5rem;
-    margin-top: 1.5rem;
-    justify-content: end;
+    margin: 1rem;
+    justify-content: flex-end;
 }
 
 .modal-buttons button {
@@ -322,6 +302,8 @@
     cursor: pointer;
     transition: all 0.2s;
     background: transparent;
+    border: none;
+    padding: 0;
 }
 
 .modal-buttons button:disabled {
@@ -329,7 +311,7 @@
     cursor: not-allowed;
 }
 
-.save-btn {
+.save-btn .cancel-btn {
     background: transparent;
     color: var(--main-text-color);
 }
@@ -338,16 +320,12 @@
     font-weight: bold;
 }
 
-.cancel-btn {
-    color: var(--main-text-color);
-}
-
 .cancel-btn:hover:not(:disabled) {
-    border-color: #ef4444;
-    color: #ef4444;
 }
 
-/* ========== INGREDIENTS SECTION ========== */
+/* ============================================
+  INGREDIENTS SECTION
+   ============================================ */
 
 .ingredients-section {
     background: white;
@@ -384,7 +362,9 @@
     gap: 0.5rem;
 }
 
-/* Conversion toggle button */
+/* ============================================
+  CONVERSION BUTTONS
+   ============================================ */
 .conversion-toggle {
     display: inline-flex;
     align-items: center;
@@ -414,7 +394,9 @@
     opacity: 0.5;
 }
 
-/* Ingredients list */
+/* ============================================
+  INGREDIENTS LIST
+   ============================================ */
 .ingredients-list {
     list-style: none;
     padding: 0;
@@ -459,7 +441,9 @@
     color: #999;
 }
 
-/* Edit mode styles */
+/* ============================================
+  INGREDIENTS EDIT MODE
+   ============================================ */
 .edit-mode {
     display: flex;
     flex-direction: column;

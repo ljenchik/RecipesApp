@@ -1,0 +1,9 @@
+flask
+flask-cors
+flask-sqlalchemy
+flask-migrate
+psycopg2-binary
+recipe-scrapers
+requests
+beautifulsoup4
+chardet

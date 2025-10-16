@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from "react";
 import {
     View,
@@ -8,6 +9,19 @@ import {
     Image,
 } from "react-native";
 import { recipeAPI } from "../services/api";
+=======
+import { useState, useEffect } from "react";
+import {
+    ScrollView,
+    View,
+    Text,
+    ActivityIndicator,
+    Image,
+    StyleSheet,
+} from "react-native";
+import { recipeAPI } from "../services/api";
+import LogoAndName from "../components/Header/LogoAndName";
+>>>>>>> d43d6cb (Added Logo and Name)
 
 export default function Index() {
     const [recipes, setRecipes] = useState([]);
@@ -15,12 +29,16 @@ export default function Index() {
     const [error, setError] = useState(null);
 
     useEffect(() => {
+<<<<<<< HEAD
         console.log("🚀 Home screen mounted");
+=======
+>>>>>>> d43d6cb (Added Logo and Name)
         fetchRecipes();
     }, []);
 
     const fetchRecipes = async () => {
         try {
+<<<<<<< HEAD
             console.log("📥 Fetching recipes...");
             setLoading(true);
 
@@ -35,11 +53,20 @@ export default function Index() {
         } catch (err) {
             console.error("❌ Fetch error:", err);
             setError(`Failed to load recipes: ${err.message}`);
+=======
+            setLoading(true);
+            const data = await recipeAPI.getRecipes();
+            if (data && data.length > 0) setRecipes(data);
+            else setError("No recipes found");
+        } catch (err) {
+            setError(err.message);
+>>>>>>> d43d6cb (Added Logo and Name)
         } finally {
             setLoading(false);
         }
     };
 
+<<<<<<< HEAD
     if (loading) {
         return (
             <View style={styles.centered}>
@@ -111,6 +138,23 @@ export default function Index() {
                             </Text>
                         </View>
                     )}
+=======
+    if (loading) return <ActivityIndicator size="large" style={{ flex: 1 }} />;
+    if (error) return <Text>{error}</Text>;
+
+    return (
+        <ScrollView style={styles.container}>
+            <LogoAndName />
+            {recipes.map((r, i) => (
+                <View key={i} style={styles.card}>
+                    {r.imageUrl && (
+                        <Image
+                            source={{ uri: r.imageUrl }}
+                            style={styles.image}
+                        />
+                    )}
+                    <Text style={styles.title}>{r.title}</Text>
+>>>>>>> d43d6cb (Added Logo and Name)
                 </View>
             ))}
         </ScrollView>
@@ -118,6 +162,7 @@ export default function Index() {
 }
 
 const styles = StyleSheet.create({
+<<<<<<< HEAD
     container: {
         flex: 1,
         backgroundColor: "#f8f9fa",
@@ -147,10 +192,15 @@ const styles = StyleSheet.create({
         marginTop: 5,
     },
     recipeCard: {
+=======
+    container: { flex: 1, padding: 16, backgroundColor: "#f8f9fa" },
+    card: {
+>>>>>>> d43d6cb (Added Logo and Name)
         marginBottom: 20,
         backgroundColor: "#fff",
         borderRadius: 8,
         overflow: "hidden",
+<<<<<<< HEAD
         marginHorizontal: 10,
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 1 },
@@ -200,5 +250,10 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: "#555",
         lineHeight: 22,
+=======
+        padding: 10,
+>>>>>>> d43d6cb (Added Logo and Name)
     },
+    image: { width: "100%", height: 200, borderRadius: 8 },
+    title: { fontSize: 20, fontWeight: "bold", marginTop: 10 },
 });

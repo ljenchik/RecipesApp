@@ -1,6 +1,11 @@
 import axios from "axios";
 
+<<<<<<< HEAD
 const API_BASE_URL = "http://192.168.1.204:5000";
+=======
+// Use YOUR computer's IP address
+const API_BASE_URL = "http://192.168.1.204:5000"; // ← Update this!
+>>>>>>> d43d6cb (Added Logo and Name)
 
 const api = axios.create({
     baseURL: API_BASE_URL,
@@ -10,7 +15,11 @@ const api = axios.create({
     timeout: 10000,
 });
 
+<<<<<<< HEAD
 // Add logging
+=======
+// Add logging to debug
+>>>>>>> d43d6cb (Added Logo and Name)
 api.interceptors.request.use((config) => {
     console.log("📤 API Request:", config.method.toUpperCase(), config.url);
     return config;
@@ -18,20 +27,29 @@ api.interceptors.request.use((config) => {
 
 api.interceptors.response.use(
     (response) => {
+<<<<<<< HEAD
         console.log("✅ API Response:", response.status);
+=======
+        console.log("✅ API Success:", response.status);
+>>>>>>> d43d6cb (Added Logo and Name)
         return response;
     },
     (error) => {
         console.error("❌ API Error:", error.message);
         if (error.response) {
+<<<<<<< HEAD
             console.error("Status:", error.response.status);
             console.error("Data:", error.response.data);
+=======
+            console.error("Error data:", error.response.data);
+>>>>>>> d43d6cb (Added Logo and Name)
         }
         return Promise.reject(error);
     }
 );
 
 export const recipeAPI = {
+<<<<<<< HEAD
     // Mobile → Flask → PostgreSQL → Flask → Mobile
     getRecipes: async () => {
         try {
@@ -139,6 +157,67 @@ export const recipeAPI = {
             console.error(`Error updating notes for recipe ${id}:`, error);
             throw error;
         }
+=======
+    getRecipes: async () => {
+        const response = await api.get("/recipes");
+        return response.data;
+    },
+
+    getRecipe: async (id) => {
+        const response = await api.get(`/recipes/${id}`);
+        return response.data;
+    },
+
+    createRecipe: async (recipeData) => {
+        const response = await api.post("/recipes", recipeData);
+        return response.data;
+    },
+
+    updateRecipe: async (id, recipeData) => {
+        const response = await api.put(`/recipes/${id}`, recipeData);
+        return response.data;
+    },
+
+    deleteRecipe: async (id) => {
+        const response = await api.delete(`/recipes/${id}`);
+        return response.data;
+    },
+
+    addRecipeByUrl: async (url) => {
+        const response = await api.post("/recipes/scrape", { url });
+        return response.data;
+    },
+
+    uploadImage: async (id, imageUri) => {
+        const formData = new FormData();
+
+        const filename = imageUri.split("/").pop();
+        const match = /\.(\w+)$/.exec(filename);
+        const type = match ? `image/${match[1]}` : "image/jpeg";
+
+        formData.append("image", {
+            uri: imageUri,
+            name: filename || "recipe-image.jpg",
+            type: type,
+        });
+
+        const response = await api.post(
+            `/recipes/${id}/upload-image`,
+            formData,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            }
+        );
+
+        return response.data;
+    },
+
+    updateNotes: async (id, notes) => {
+        const response = await api.put(`/recipes/${id}/notes`, { notes });
+        return response.data;
+>>>>>>> d43d6cb (Added Logo and Name)
     },
 };
 

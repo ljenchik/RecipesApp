@@ -1,12 +1,14 @@
 import { StyleSheet, Text, View } from "react-native";
 import { Image } from "expo-image";
 import logo from "../assets/images/logo.png";
+import { Link } from "expo-router";
 
 export default function Index() {
     return (
         <View style={styles.container}>
             <Text style={styles.text}>RecipesApp</Text>
             <Image source={logo} style={{ width: 100, height: 100 }} />
+            <Link href={"/about"}> visit about screen</Link>
         </View>
     );
 }

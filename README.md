@@ -14,10 +14,15 @@ A modern, handy, feature-rich recipe management application that helps you organ
 
 ## 🖼️ Screenshots
 
-<img src="frontend/public/app-home-page.png" alt="App Screenshot" width="300"/>
-<img src="frontend/public/recipe-page.png" alt="App Screenshot" width="300"/>
-<img src="frontend/public/recipe-page-editing.png" alt="App Screenshot" width="300"/>
-<img src="frontend/public/create-recipe.png" alt="App Screenshot" width="300"/>
+<p align="center">
+  <img src="frontend/public/app-home-page.png" alt="Home Page" width="350" />
+  <img src="frontend/public/recipe-page.png" alt="Recipe Page" width="350" />
+</p>
+
+<p align="center">
+  <img src="frontend/public/recipe-page-editing.png" alt="Editing Recipe Page" width="350" />
+  <img src="frontend/public/create-recipe.png" alt="Create Recipe Page" width="350" />
+</p>
 
 ## ⚡ Quick Start
 

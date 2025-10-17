@@ -5,14 +5,14 @@ import {
     StyleSheet,
     ActivityIndicator,
     ScrollView,
-    Image,
 } from "react-native";
 import { recipeAPI } from "../services/api";
 import Header from "./../components/Header/Header";
+import RecipeCard from "../components/RecipeCard/RecipeCard";
 
 export default function Index() {
-    const [recipes, setRecipes] = useState([]); // All recipes from API
-    const [filteredRecipes, setFilteredRecipes] = useState([]); // Filtered results
+    const [recipes, setRecipes] = useState([]);
+    const [filteredRecipes, setFilteredRecipes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -31,7 +31,7 @@ export default function Index() {
 
             if (data && data.length > 0) {
                 setRecipes(data);
-                setFilteredRecipes(data); // ← IMPORTANT: Initialize filtered with all
+                setFilteredRecipes(data);
             } else {
                 setError("No recipes found in database");
             }
@@ -105,92 +105,40 @@ export default function Index() {
         );
     }
 
+    const handleDelete = async (id) => {
+        try {
+            const data = await recipeAPI.deleteRecipe(id);
+            console.log("Delete response:", data);
+
+            setRecipes((prev) => prev.filter((r) => r.id !== id));
+            setFilteredRecipes((prev) => prev.filter((r) => r.id !== id));
+
+            console.log(`✅ Recipe ${id} deleted successfully`);
+        } catch (error) {
+            console.error("❌ Error deleting recipe:", error);
+            alert("Failed to delete recipe. Please try again.");
+        }
+    };
+
     return (
         <View style={styles.container}>
             {/* Header with all controls */}
-            <Header
-                onRecipeAdded={handleRecipeAdded}
-                onSearch={handleSearch} // ← Make sure this is passed!
-            />
+            <Header onRecipeAdded={handleRecipeAdded} onSearch={handleSearch} />
 
             {/* Scrollable Content */}
             <ScrollView style={styles.scrollView}>
-                {/* Results Count */}
-                {filteredRecipes.length !== recipes.length && (
-                    <Text style={styles.resultsText}>
-                        Found {filteredRecipes.length} recipe
-                        {filteredRecipes.length !== 1 ? "s" : ""}
-                    </Text>
-                )}
-
-                {/* Recipe List - USE filteredRecipes, NOT recipes! */}
-                {filteredRecipes.length > 0 ? (
-                    filteredRecipes.map((recipe, index) => (
-                        <View
-                            key={recipe.id || index}
-                            style={styles.recipeCard}
-                        >
-                            {/* Recipe Image */}
-                            {recipe.imageUrl && (
-                                <Image
-                                    source={{ uri: recipe.imageUrl }}
-                                    style={styles.image}
-                                    resizeMode="cover"
-                                />
-                            )}
-
-                            {/* Recipe Title */}
-                            <Text style={styles.title}>{recipe.title}</Text>
-
-                            {/* Meta Info */}
-                            <View style={styles.metaContainer}>
-                                {recipe.prepTime && (
-                                    <Text style={styles.meta}>
-                                        ⏱️ {recipe.prepTime}
-                                    </Text>
-                                )}
-                                {recipe.servings && (
-                                    <Text style={styles.meta}>
-                                        🍽️ {recipe.servings}
-                                    </Text>
-                                )}
-                            </View>
-
-                            {/* Ingredients */}
-                            {recipe.ingredients &&
-                                recipe.ingredients.length > 0 && (
-                                    <View style={styles.section}>
-                                        <Text style={styles.sectionTitle}>
-                                            Ingredients
-                                        </Text>
-                                        {recipe.ingredients
-                                            .slice(0, 5)
-                                            .map((ingredient, i) => (
-                                                <Text
-                                                    key={i}
-                                                    style={styles.ingredient}
-                                                >
-                                                    • {ingredient}
-                                                </Text>
-                                            ))}
-                                        {recipe.ingredients.length > 5 && (
-                                            <Text style={styles.moreText}>
-                                                +{recipe.ingredients.length - 5}{" "}
-                                                more...
-                                            </Text>
-                                        )}
-                                    </View>
-                                )}
-                        </View>
-                    ))
-                ) : (
+                {filteredRecipes.length === 0 ? (
                     <View style={styles.emptyState}>
-                        <Text style={styles.emptyEmoji}>🔍</Text>
                         <Text style={styles.emptyText}>No recipes found</Text>
-                        <Text style={styles.emptyHint}>
-                            Try searching for something else
-                        </Text>
                     </View>
+                ) : (
+                    filteredRecipes.map((recipe) => (
+                        <RecipeCard
+                            key={recipe.id}
+                            recipe={recipe}
+                            onDelete={handleDelete}
+                        />
+                    ))
                 )}
             </ScrollView>
         </View>
@@ -200,19 +148,19 @@ export default function Index() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#f8f9fa",
+        backgroundColor: "#fbf5f5e8",
     },
     centered: {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
         padding: 20,
-        backgroundColor: "#fbf5f5e0",
+        backgroundColor: "#fbf5f5e8",
     },
     loadingText: {
         marginTop: 10,
         fontSize: 16,
-        color: "#666",
+        color: "#555",
     },
     errorText: {
         fontSize: 18,
@@ -236,79 +184,79 @@ const styles = StyleSheet.create({
         color: "#610864",
         fontWeight: "600",
     },
-    recipeCard: {
-        marginBottom: 20,
-        backgroundColor: "#fff",
-        borderRadius: 8,
-        overflow: "hidden",
-        marginHorizontal: 10,
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.2,
-        shadowRadius: 1.41,
-        elevation: 2,
-    },
-    image: {
-        width: "100%",
-        height: 200,
-        backgroundColor: "#f0f0f0",
-    },
-    title: {
-        fontSize: 22,
-        fontWeight: "bold",
-        color: "#333",
-        padding: 15,
-        paddingBottom: 5,
-    },
-    metaContainer: {
-        flexDirection: "row",
-        paddingHorizontal: 15,
-        paddingBottom: 10,
-    },
-    meta: {
-        fontSize: 14,
-        color: "#666",
-        marginRight: 20,
-    },
-    section: {
-        paddingHorizontal: 15,
-        paddingBottom: 15,
-    },
-    sectionTitle: {
-        fontSize: 18,
-        fontWeight: "bold",
-        color: "#333",
-        marginBottom: 10,
-    },
-    ingredient: {
-        fontSize: 16,
-        color: "#555",
-        marginBottom: 6,
-        lineHeight: 22,
-    },
-    moreText: {
-        fontSize: 14,
-        color: "#999",
-        fontStyle: "italic",
-        marginTop: 5,
-    },
-    emptyState: {
-        padding: 60,
-        alignItems: "center",
-    },
-    emptyEmoji: {
-        fontSize: 64,
-        marginBottom: 20,
-    },
-    emptyText: {
-        fontSize: 20,
-        fontWeight: "600",
-        color: "#666",
-        marginBottom: 10,
-    },
-    emptyHint: {
-        fontSize: 16,
-        color: "#999",
-        textAlign: "center",
-    },
+    // recipeCard: {
+    //     marginBottom: 20,
+    //     backgroundColor: "#fff",
+    //     borderRadius: 8,
+    //     overflow: "hidden",
+    //     marginHorizontal: 10,
+    //     shadowColor: "#000",
+    //     shadowOffset: { width: 0, height: 1 },
+    //     shadowOpacity: 0.2,
+    //     shadowRadius: 1.41,
+    //     elevation: 2,
+    // },
+    // image: {
+    //     width: "100%",
+    //     height: 200,
+    //     backgroundColor: "#f0f0f0",
+    // },
+    // title: {
+    //     fontSize: 22,
+    //     fontWeight: "bold",
+    //     color: "#333",
+    //     padding: 15,
+    //     paddingBottom: 5,
+    // },
+    // metaContainer: {
+    //     flexDirection: "row",
+    //     paddingHorizontal: 15,
+    //     paddingBottom: 10,
+    // },
+    // meta: {
+    //     fontSize: 14,
+    //     color: "#555",
+    //     marginRight: 20,
+    // },
+    // section: {
+    //     paddingHorizontal: 15,
+    //     paddingBottom: 15,
+    // },
+    // sectionTitle: {
+    //     fontSize: 18,
+    //     fontWeight: "bold",
+    //     color: "#333",
+    //     marginBottom: 10,
+    // },
+    // ingredient: {
+    //     fontSize: 16,
+    //     color: "#555",
+    //     marginBottom: 6,
+    //     lineHeight: 22,
+    // },
+    // moreText: {
+    //     fontSize: 14,
+    //     color: "#999",
+    //     fontStyle: "italic",
+    //     marginTop: 5,
+    // },
+    // emptyState: {
+    //     padding: 60,
+    //     alignItems: "center",
+    // },
+    // emptyEmoji: {
+    //     fontSize: 64,
+    //     marginBottom: 20,
+    // },
+    // emptyText: {
+    //     fontSize: 20,
+    //     fontWeight: "600",
+    //     color: "#555",
+    //     marginBottom: 10,
+    // },
+    // emptyHint: {
+    //     fontSize: 16,
+    //     color: "#999",
+    //     textAlign: "center",
+    // },
 });

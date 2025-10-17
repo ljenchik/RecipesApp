@@ -20,8 +20,12 @@ import {
     StyleSheet,
 } from "react-native";
 import { recipeAPI } from "../services/api";
+<<<<<<< HEAD
 import LogoAndName from "../components/Header/LogoAndName";
 >>>>>>> d43d6cb (Added Logo and Name)
+=======
+import Header from "../components/Header/Header";
+>>>>>>> 08a872f (Added search bar, add recipe)
 
 export default function Index() {
     const [recipes, setRecipes] = useState([]);
@@ -144,7 +148,7 @@ export default function Index() {
 
     return (
         <ScrollView style={styles.container}>
-            <LogoAndName />
+            <Header />
             {recipes.map((r, i) => (
                 <View key={i} style={styles.card}>
                     {r.imageUrl && (
@@ -162,6 +166,7 @@ export default function Index() {
 }
 
 const styles = StyleSheet.create({
+<<<<<<< HEAD
 <<<<<<< HEAD
     container: {
         flex: 1,
@@ -197,6 +202,11 @@ const styles = StyleSheet.create({
     card: {
 >>>>>>> d43d6cb (Added Logo and Name)
         marginBottom: 20,
+=======
+    container: { flex: 1, backgroundColor: "#f8f9fa" },
+    card: {
+        marginBottom: 10,
+>>>>>>> 08a872f (Added search bar, add recipe)
         backgroundColor: "#fff",
         borderRadius: 8,
         overflow: "hidden",

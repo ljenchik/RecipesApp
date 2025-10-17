@@ -1,9 +1,5 @@
 // app/_layout.jsx
 import { Stack } from "expo-router";
-<<<<<<< HEAD
-
-export default function RootLayout() {
-=======
 import { useFonts } from "expo-font";
 
 export default function RootLayout() {
@@ -13,6 +9,5 @@ export default function RootLayout() {
 
     if (!fontsLoaded) return null;
 
->>>>>>> d43d6cb (Added Logo and Name)
     return <Stack screenOptions={{ headerShown: false }} />;
 }

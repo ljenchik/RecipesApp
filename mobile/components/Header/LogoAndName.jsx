@@ -5,7 +5,7 @@ export default function LogoAndName() {
     const router = useRouter();
 
     const handlePress = () => {
-        router.push("/index");
+        router.push("/");
     };
 
     return (
@@ -23,9 +23,8 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: "row",
         alignItems: "center",
-        marginBottom: 20,
-        backgroundColor: "#fbf5f5e0",
-        paddingTop: 20,
+        backgroundColor: "#fbf5f5e8",
+        padding: 20,
         width: "100%",
     },
     icon: { width: 40, height: 40, marginRight: 10 },
@@ -33,6 +32,6 @@ const styles = StyleSheet.create({
         fontSize: 36,
         fontFamily: "Cookie-Regular",
         color: "#610864",
-        fontWeight: 600,
+        fontWeight: 800,
     },
 });

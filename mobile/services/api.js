@@ -1,11 +1,16 @@
 import axios from "axios";
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 const API_BASE_URL = "http://192.168.1.204:5000";
 =======
 // Use YOUR computer's IP address
 const API_BASE_URL = "http://192.168.1.204:5000"; // ← Update this!
 >>>>>>> d43d6cb (Added Logo and Name)
+=======
+// Modify
+const API_BASE_URL = "http://192.168.2.59:5000";
+>>>>>>> 08a872f (Added search bar, add recipe)
 
 const api = axios.create({
     baseURL: API_BASE_URL,
@@ -184,7 +189,7 @@ export const recipeAPI = {
     },
 
     addRecipeByUrl: async (url) => {
-        const response = await api.post("/recipes/scrape", { url });
+        const response = await api.post("/recipes/parse-and-save", { url });
         return response.data;
     },
 

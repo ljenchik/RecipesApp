@@ -1,24 +1,41 @@
-import { Link } from "expo-router";
+import { View, StyleSheet, Platform } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
+import LogoAndName from "./LogoAndName";
 import AddRecipeByUrl from "./AddRecipeByUrl";
 import SearchBar from "./SearchBar";
 
-import icon from "../../assets/images/logo.png";
-
-function Header({ onRecipeAdded, onSearch }) {
+export default function Header({ onRecipeAdded, onSearch }) {
     return (
-        <div className="header">
-            <Link to="/" className="logo-link">
-                <img src={icon} alt="Recipes App Icon" className="logo-icon" />
-                <h1>RecipesApp</h1>
-            </Link>
-
-            <div className="header-controls">
+        <SafeAreaView edges={["top"]} style={styles.safeArea}>
+            <View style={styles.header}>
+                {/* Logo and Name */}
+                <LogoAndName />
+                {/* Add Recipe by URL */}
                 <AddRecipeByUrl onRecipeAdded={onRecipeAdded} />
+                {/* Search Bar */}
                 <SearchBar onSearch={onSearch} />
-            </div>
-        </div>
+            </View>
+        </SafeAreaView>
     );
 }
 
-export default Header;
+const styles = StyleSheet.create({
+    safeArea: {
+        backgroundColor: "#fbf5f5e0",
+    },
+    header: {
+        backgroundColor: "#fbf5f5e0",
+        ...Platform.select({
+            ios: {
+                shadowColor: "#000",
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.1,
+                shadowRadius: 3,
+            },
+            android: {
+                elevation: 5,
+            },
+        }),
+    },
+});

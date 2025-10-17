@@ -1,15 +1,3 @@
-<<<<<<< HEAD
-import React, { useState, useEffect } from "react";
-import {
-    View,
-    Text,
-    StyleSheet,
-    ActivityIndicator,
-    ScrollView,
-    Image,
-} from "react-native";
-import { recipeAPI } from "../services/api";
-=======
 import { useState, useEffect } from "react";
 import {
     View,
@@ -20,53 +8,22 @@ import {
     Image,
 } from "react-native";
 import { recipeAPI } from "../services/api";
-<<<<<<< HEAD
-import LogoAndName from "../components/Header/LogoAndName";
->>>>>>> d43d6cb (Added Logo and Name)
-=======
-import Header from "../components/Header/Header";
->>>>>>> 08a872f (Added search bar, add recipe)
+import Header from "./../components/Header/Header";
 
 export default function Index() {
-    const [recipes, setRecipes] = useState([]);
-    const [filteredRecipes, setFilteredRecipes] = useState([]);
+    const [recipes, setRecipes] = useState([]); // All recipes from API
+    const [filteredRecipes, setFilteredRecipes] = useState([]); // Filtered results
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-<<<<<<< HEAD
-<<<<<<< HEAD
         console.log("🚀 Home screen mounted");
-=======
->>>>>>> d43d6cb (Added Logo and Name)
-=======
-        console.log("🚀 Home screen mounted");
->>>>>>> d812e6d (Improved search bar functionality)
         fetchRecipes();
     }, []);
 
     const fetchRecipes = async () => {
         try {
-<<<<<<< HEAD
-<<<<<<< HEAD
             console.log("📥 Fetching recipes...");
-            setLoading(true);
-
-            const data = await recipeAPI.getRecipes();
-            console.log("✅ Recipes received:", data);
-
-            if (data && data.length > 0) {
-                setRecipes(data);
-            } else {
-                setError("No recipes found in database");
-            }
-        } catch (err) {
-            console.error("❌ Fetch error:", err);
-            setError(`Failed to load recipes: ${err.message}`);
-=======
-=======
-            console.log("📥 Fetching recipes...");
->>>>>>> d812e6d (Improved search bar functionality)
             setLoading(true);
 
             const data = await recipeAPI.getRecipes();
@@ -74,34 +31,23 @@ export default function Index() {
 
             if (data && data.length > 0) {
                 setRecipes(data);
-                setFilteredRecipes(data);
+                setFilteredRecipes(data); // ← IMPORTANT: Initialize filtered with all
             } else {
                 setError("No recipes found in database");
             }
         } catch (err) {
-<<<<<<< HEAD
-            setError(err.message);
->>>>>>> d43d6cb (Added Logo and Name)
-=======
             console.error("❌ Fetch error:", err);
             setError(`Failed to load recipes: ${err.message}`);
->>>>>>> d812e6d (Improved search bar functionality)
         } finally {
             setLoading(false);
         }
     };
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-    if (loading) {
-        return (
-            <View style={styles.centered}>
-                <ActivityIndicator size="large" color="#ff6b6b" />
-=======
     const handleSearch = (query) => {
         console.log("🔍 Search called with:", query);
         console.log("📊 Total recipes available:", recipes.length);
 
+        // No query = show all recipes
         if (!query || query.trim() === "") {
             console.log("✅ No query - showing all recipes");
             setFilteredRecipes(recipes);
@@ -122,6 +68,7 @@ export default function Index() {
                 ingredient?.toLowerCase().includes(lowercaseQuery)
             );
 
+            // Search in instructions (optional)
             const instructionsMatch = recipe.instructions
                 ?.toLowerCase()
                 .includes(lowercaseQuery);
@@ -144,7 +91,6 @@ export default function Index() {
         return (
             <View style={styles.centered}>
                 <ActivityIndicator size="large" color="#610864" />
->>>>>>> d812e6d (Improved search bar functionality)
                 <Text style={styles.loadingText}>Loading recipes...</Text>
             </View>
         );
@@ -158,82 +104,6 @@ export default function Index() {
             </View>
         );
     }
-<<<<<<< HEAD
-
-    return (
-        <ScrollView style={styles.container}>
-            {recipes.map((recipe, index) => (
-                <View key={index} style={styles.recipeCard}>
-                    {/* Recipe Image */}
-                    {recipe.imageUrl && (
-                        <Image
-                            source={{ uri: recipe.imageUrl }}
-                            style={styles.image}
-                            resizeMode="cover"
-                        />
-                    )}
-
-                    {/* Recipe Title */}
-                    <Text style={styles.title}>{recipe.title}</Text>
-
-                    {/* Meta Info */}
-                    <View style={styles.metaContainer}>
-                        {recipe.prepTime && (
-                            <Text style={styles.meta}>
-                                ⏱️ {recipe.prepTime}
-                            </Text>
-                        )}
-                        {recipe.servings && (
-                            <Text style={styles.meta}>
-                                🍽️ {recipe.servings}
-                            </Text>
-                        )}
-                    </View>
-
-                    {/* Ingredients */}
-                    {recipe.ingredients && recipe.ingredients.length > 0 && (
-                        <View style={styles.section}>
-                            <Text style={styles.sectionTitle}>Ingredients</Text>
-                            {recipe.ingredients.map((ingredient, i) => (
-                                <Text key={i} style={styles.ingredient}>
-                                    • {ingredient}
-                                </Text>
-                            ))}
-                        </View>
-                    )}
-
-                    {/* Instructions */}
-                    {recipe.instructions && (
-                        <View style={styles.section}>
-                            <Text style={styles.sectionTitle}>
-                                Instructions
-                            </Text>
-                            <Text style={styles.instructions}>
-                                {recipe.instructions}
-                            </Text>
-                        </View>
-                    )}
-=======
-    if (loading) return <ActivityIndicator size="large" style={{ flex: 1 }} />;
-    if (error) return <Text>{error}</Text>;
-
-    return (
-        <ScrollView style={styles.container}>
-            <Header />
-            {recipes.map((r, i) => (
-                <View key={i} style={styles.card}>
-                    {r.imageUrl && (
-                        <Image
-                            source={{ uri: r.imageUrl }}
-                            style={styles.image}
-                        />
-                    )}
-                    <Text style={styles.title}>{r.title}</Text>
->>>>>>> d43d6cb (Added Logo and Name)
-                </View>
-            ))}
-        </ScrollView>
-=======
 
     return (
         <View style={styles.container}>
@@ -324,16 +194,10 @@ export default function Index() {
                 )}
             </ScrollView>
         </View>
->>>>>>> d812e6d (Improved search bar functionality)
     );
 }
 
 const styles = StyleSheet.create({
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> d812e6d (Improved search bar functionality)
     container: {
         flex: 1,
         backgroundColor: "#f8f9fa",
@@ -343,11 +207,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         padding: 20,
-<<<<<<< HEAD
-        backgroundColor: "#f8f9fa",
-=======
         backgroundColor: "#fbf5f5e0",
->>>>>>> d812e6d (Improved search bar functionality)
     },
     loadingText: {
         marginTop: 10,
@@ -358,31 +218,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: "#ff6b6b",
         textAlign: "center",
-<<<<<<< HEAD
-        marginBottom: 10,
-    },
-    hint: {
-        fontSize: 14,
-        color: "#999",
-        textAlign: "center",
-        marginTop: 5,
-    },
-    recipeCard: {
-=======
-    container: { flex: 1, padding: 16, backgroundColor: "#f8f9fa" },
-    card: {
->>>>>>> d43d6cb (Added Logo and Name)
-        marginBottom: 20,
-=======
-    container: { flex: 1, backgroundColor: "#f8f9fa" },
-    card: {
-        marginBottom: 10,
->>>>>>> 08a872f (Added search bar, add recipe)
-        backgroundColor: "#fff",
-        borderRadius: 8,
-        overflow: "hidden",
-<<<<<<< HEAD
-=======
         marginBottom: 10,
     },
     hint: {
@@ -406,7 +241,6 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
         borderRadius: 8,
         overflow: "hidden",
->>>>>>> d812e6d (Improved search bar functionality)
         marginHorizontal: 10,
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 1 },
@@ -452,15 +286,6 @@ const styles = StyleSheet.create({
         marginBottom: 6,
         lineHeight: 22,
     },
-<<<<<<< HEAD
-    instructions: {
-        fontSize: 16,
-        color: "#555",
-        lineHeight: 22,
-=======
-        padding: 10,
->>>>>>> d43d6cb (Added Logo and Name)
-=======
     moreText: {
         fontSize: 14,
         color: "#999",
@@ -485,6 +310,5 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: "#999",
         textAlign: "center",
->>>>>>> d812e6d (Improved search bar functionality)
     },
 });

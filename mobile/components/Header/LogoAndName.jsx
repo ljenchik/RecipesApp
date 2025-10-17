@@ -29,9 +29,8 @@ const styles = StyleSheet.create({
     },
     icon: { width: 40, height: 40, marginRight: 10 },
     text: {
-        fontSize: 36,
+        fontSize: 40,
         fontFamily: "Cookie-Regular",
         color: "#610864",
-        fontWeight: 800,
     },
 });

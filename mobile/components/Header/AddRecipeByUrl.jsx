@@ -20,7 +20,7 @@ export default function AddRecipeByUrl({ onRecipeAdded }) {
     const inputRef = useRef(null);
 
     const handleSubmit = async () => {
-        Keyboard.dismiss(); // ← Close keyboard
+        Keyboard.dismiss();
         setError("");
 
         if (!url.trim()) {

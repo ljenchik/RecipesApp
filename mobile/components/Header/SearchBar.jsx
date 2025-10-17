@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 10,
         paddingVertical: 10,
-        backgroundColor: "#fff",
+        backgroundColor: "#fbf5f5e8",
     },
     searchBar: {
         flexDirection: "row",
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
     },
     searchIcon: {
         fontSize: 20,
-        color: "#666",
+        color: "#555",
     },
     input: {
         flex: 1,
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
     },
     clearIcon: {
         fontSize: 16,
-        color: "#666",
+        color: "#555",
         fontWeight: "bold",
         lineHeight: 20,
     },

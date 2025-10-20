@@ -1,6 +1,7 @@
 import axios from "axios";
+import { API_BASE_URL } from "./../constatnts/config";
 
-const API_BASE_URL = "http://192.168.1.204:5000";
+//const API_BASE_URL = "http://192.168.1.204:5000";
 //const API_BASE_URL = "http://192.168.2.59:5000";
 
 const api = axios.create({
@@ -64,7 +65,6 @@ export const recipeAPI = {
 
     uploadImage: async (id, imageUri) => {
         const formData = new FormData();
-
         const filename = imageUri.split("/").pop();
         const match = /\.(\w+)$/.exec(filename);
         const type = match ? `image/${match[1]}` : "image/jpeg";
@@ -72,16 +72,14 @@ export const recipeAPI = {
         formData.append("image", {
             uri: imageUri,
             name: filename || "recipe-image.jpg",
-            type: type,
+            type,
         });
 
         const response = await api.post(
             `/recipes/${id}/upload-image`,
             formData,
             {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
+                headers: { "Content-Type": "multipart/form-data" },
             }
         );
 
@@ -93,5 +91,3 @@ export const recipeAPI = {
         return response.data;
     },
 };
-
-export default api;

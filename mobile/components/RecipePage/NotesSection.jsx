@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 
 export default function NotesSection({ notes }) {
     return (
-        <View style={styles.container}>
+        <View style={styles.section}>
             <Text style={styles.sectionTitle}>Notes</Text>
             <Text style={styles.text}>{notes}</Text>
         </View>
@@ -11,7 +11,15 @@ export default function NotesSection({ notes }) {
 }
 
 const styles = StyleSheet.create({
-    container: { marginVertical: 10 },
-    sectionTitle: { fontSize: 18, fontWeight: "bold", marginBottom: 6 },
-    text: { fontSize: 16, lineHeight: 22 },
+    section: {
+        paddingHorizontal: 15,
+        paddingBottom: 15,
+    },
+    sectionTitle: {
+        fontSize: 18,
+        fontWeight: "bold",
+        color: "#610864",
+        marginTop: 10,
+        marginBottom: 10,
+    },
 });

@@ -14,6 +14,7 @@ import IngredientsSection from "../../components/RecipePage/IngredientsSection";
 import RecipePageHeader from "../../components/RecipePage/RecipesPageHeader";
 import InstructionsSection from "../../components/RecipePage/InstructionsSection";
 import NotesSection from "../../components/RecipePage/NotesSection";
+import { API_BASE_URL } from "../../constatnts/config";
 
 export default function RecipePage() {
     const router = useRouter();
@@ -40,6 +41,27 @@ export default function RecipePage() {
         } finally {
             setLoading(false);
         }
+    };
+
+    const updateField = async (id, field, value) => {
+        const body = {};
+        if (field === "ingredients") {
+            body[field] = value.split("\n").filter((line) => line.trim());
+        } else {
+            body[field] = value;
+        }
+
+        const res = await fetch(`${API_BASE_URL}/recipes/${id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+        });
+
+        if (!res.ok) {
+            throw new Error(`Failed to update ${field}`);
+        }
+
+        return res.json();
     };
 
     if (loading) {
@@ -75,7 +97,7 @@ export default function RecipePage() {
                 >
                     <Text style={styles.backText}>← Back</Text>
                 </Pressable>
-                <RecipePageHeader recipe={recipe} />
+                <RecipePageHeader recipe={recipe} onUpdate={updateField} />
                 <IngredientsSection ingredients={recipe.ingredients} />
                 <InstructionsSection instructions={recipe.instructions} />
                 <NotesSection notes={recipe.notes} />

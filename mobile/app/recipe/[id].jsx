@@ -7,14 +7,18 @@ import {
     StyleSheet,
     ActivityIndicator,
     Pressable,
+    TouchableOpacity,
+    Linking,
     Alert,
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { recipeAPI } from "../../services/api";
-import { parseTime, parseServings } from "../../utils/helpers";
+import { parseTime } from "../../utils/helpers";
+import LogoAndName from "../../components/Header/LogoAndName";
+import IngredientsSection from "../../components/RecipePage/IngredientsSection";
 
-export default function RecipeDetail() {
+export default function RecipePage() {
     const router = useRouter();
     const { id } = useLocalSearchParams();
 
@@ -66,18 +70,27 @@ export default function RecipeDetail() {
 
     return (
         <SafeAreaView style={styles.container} edges={["top"]}>
-            {/* Header with Back Button */}
-            <View style={styles.header}>
-                <Pressable
-                    style={styles.backButton}
-                    onPress={() => router.back()}
-                >
-                    <Text style={styles.backIcon}>←</Text>
-                    <Text style={styles.backText}>Back</Text>
-                </Pressable>
-            </View>
+            <ScrollView
+                style={styles.scrollView}
+                contentContainerStyle={styles.scrollContent}
+            >
+                {/* Logo + Name */}
+                <LogoAndName />
 
-            <ScrollView style={styles.scrollView}>
+                {/* Header with Back Button */}
+                <View style={styles.header}>
+                    <Pressable
+                        style={styles.backButton}
+                        onPress={() => router.back()}
+                    >
+                        <Text style={styles.backIcon}>←</Text>
+                        <Text style={styles.backText}>Back</Text>
+                    </Pressable>
+                </View>
+
+                {/* Recipe Title */}
+                <Text style={styles.title}>{recipe.title}</Text>
+
                 {/* Recipe Image */}
                 {recipe.image_url && (
                     <Image
@@ -87,54 +100,69 @@ export default function RecipeDetail() {
                     />
                 )}
 
-                {/* Recipe Title */}
-                <Text style={styles.title}>{recipe.title}</Text>
-
                 {/* Meta Info */}
-                <View style={styles.metaContainer}>
-                    {recipe.prep_time && (
+                <View style={styles.recipeMeta}>
+                    {/* Ingredients */}
+                    {recipe?.ingredients?.length > 0 && (
                         <View style={styles.metaItem}>
-                            <Text style={styles.metaIcon}>⏱️</Text>
+                            <Image
+                                source={require("../../assets/images/ingredients-logo.png")}
+                                style={styles.metaIcon}
+                            />
+                            <Text style={styles.metaText}>
+                                {recipe.ingredients.length} ingredients
+                            </Text>
+                        </View>
+                    )}
+
+                    {/* Prep Time */}
+                    {recipe?.prep_time && (
+                        <View style={styles.metaItem}>
+                            <Image
+                                source={require("../../assets/images/clock.png")}
+                                style={styles.metaIcon}
+                            />
                             <Text style={styles.metaText}>
                                 {parseTime(recipe.prep_time)}
                             </Text>
                         </View>
                     )}
-                    {recipe.servings && (
+
+                    {/* Servings */}
+                    {recipe?.servings !== undefined &&
+                        recipe?.servings !== null && (
+                            <View style={styles.metaItem}>
+                                <Image
+                                    source={require("../../assets/images/clock.png")}
+                                    style={styles.metaIcon}
+                                />
+                                <Text style={styles.metaText}>
+                                    {recipe.servings}
+                                </Text>
+                            </View>
+                        )}
+
+                    {/* Original Recipe Link */}
+                    {recipe?.source_url && (
                         <View style={styles.metaItem}>
-                            <Text style={styles.metaIcon}>🍽️</Text>
-                            <Text style={styles.metaText}>
-                                {parseServings(recipe.servings)} servings
-                            </Text>
+                            <TouchableOpacity
+                                onPress={() =>
+                                    Linking.openURL(recipe.source_url)
+                                }
+                            >
+                                <Text
+                                    style={[styles.metaText, styles.linkText]}
+                                >
+                                    🫕 Original recipe
+                                </Text>
+                            </TouchableOpacity>
                         </View>
                     )}
                 </View>
 
-                {/* Source URL */}
-                {recipe.source_url && (
-                    <View style={styles.sourceContainer}>
-                        <Text style={styles.sourceLabel}>Source:</Text>
-                        <Text style={styles.sourceUrl} numberOfLines={1}>
-                            {recipe.source_url}
-                        </Text>
-                    </View>
-                )}
-
                 {/* Ingredients Section */}
-                {recipe.ingredients && recipe.ingredients.length > 0 && (
-                    <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>
-                            Ingredients ({recipe.ingredients.length})
-                        </Text>
-                        {recipe.ingredients.map((ingredient, index) => (
-                            <View key={index} style={styles.ingredientRow}>
-                                <Text style={styles.bullet}>•</Text>
-                                <Text style={styles.ingredient}>
-                                    {ingredient}
-                                </Text>
-                            </View>
-                        ))}
-                    </View>
+                {recipe.ingredients?.length > 0 && (
+                    <IngredientsSection ingredients={recipe.ingredients} />
                 )}
 
                 {/* Instructions Section */}
@@ -162,18 +190,20 @@ export default function RecipeDetail() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#fff",
+        backgroundColor: "#fbf5f5e8",
     },
-    centered: {
+    scrollView: {
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
         padding: 20,
+    },
+    scrollContent: {
+        paddingHorizontal: 20,
+        paddingBottom: 20,
     },
     loadingText: {
         marginTop: 10,
         fontSize: 16,
-        color: "#666",
+        color: "#555",
     },
     errorText: {
         fontSize: 18,
@@ -183,98 +213,73 @@ const styles = StyleSheet.create({
     },
     header: {
         flexDirection: "row",
-        justifyContent: "space-between",
         alignItems: "center",
-        paddingHorizontal: 15,
-        paddingVertical: 10,
-        backgroundColor: "#fff",
-        borderBottomWidth: 1,
-        borderBottomColor: "#e0e0e0",
+        backgroundColor: "#fbf5f5e8",
     },
     backButton: {
         flexDirection: "row",
         alignItems: "center",
-        padding: 5,
+        paddingBottom: 5,
     },
     backIcon: {
         fontSize: 24,
         color: "#610864",
-        marginRight: 5,
     },
     backText: {
         fontSize: 16,
         color: "#610864",
         fontWeight: "600",
     },
-    backButtonText: {
-        fontSize: 16,
-        color: "#610864",
-        fontWeight: "600",
-    },
-    deleteButton: {
-        padding: 8,
-    },
-    deleteIcon: {
-        fontSize: 24,
-    },
-    scrollView: {
-        flex: 1,
-    },
     image: {
         width: "100%",
         height: 300,
-        backgroundColor: "#f0f0f0",
+        backgroundColor: "white",
+        margin: "auto",
+        borderRadius: 10,
+        marginBottom: 10,
     },
     title: {
-        fontSize: 28,
+        fontSize: 20,
         fontWeight: "bold",
-        color: "#333",
-        padding: 20,
+        color: "#610864",
+        paddingTop: 10,
         paddingBottom: 10,
     },
-    metaContainer: {
+    recipeMeta: {
         flexDirection: "row",
-        paddingHorizontal: 20,
-        paddingBottom: 15,
-        gap: 20,
+        flexWrap: "wrap",
+        gap: 10,
+        justifyContent: "flex-start",
+        alignItems: "center",
+        paddingBottom: 5,
+        marginTop: "auto",
     },
     metaItem: {
         flexDirection: "row",
         alignItems: "center",
-        gap: 5,
-    },
-    metaIcon: {
-        fontSize: 18,
+        gap: 3,
     },
     metaText: {
-        fontSize: 16,
-        color: "#666",
-    },
-    sourceContainer: {
-        paddingHorizontal: 20,
-        paddingBottom: 20,
-        borderBottomWidth: 1,
-        borderBottomColor: "#e0e0e0",
-    },
-    sourceLabel: {
-        fontSize: 14,
-        fontWeight: "600",
-        color: "#666",
-        marginBottom: 5,
-    },
-    sourceUrl: {
-        fontSize: 14,
+        fontSize: 12,
         color: "#610864",
     },
+    metaIcon: {
+        width: 20,
+        height: 20,
+        resizeMode: "contain",
+    },
+    linkText: {
+        color: "#610864",
+        fontSize: 12,
+        textDecorationLine: "none",
+    },
     section: {
-        padding: 20,
-        borderBottomWidth: 1,
-        borderBottomColor: "#e0e0e0",
+        paddingTop: 20,
     },
     sectionTitle: {
         fontSize: 22,
         fontWeight: "bold",
-        color: "#333",
+        color: "#610864",
         marginBottom: 15,
     },
     ingredientRow: {

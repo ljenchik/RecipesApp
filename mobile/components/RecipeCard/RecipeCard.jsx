@@ -55,7 +55,7 @@ export default function RecipeCard({ recipe, onDelete }) {
                 </View>
                 <View style={styles.footerItem}>
                     <Image
-                        source={require("../../assets/images/sand-clock.png")}
+                        source={require("../../assets/images/clock.png")}
                         style={styles.ingredientsLogo}
                     />
                     <Text style={styles.footerText}>

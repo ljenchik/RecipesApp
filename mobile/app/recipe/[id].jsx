@@ -5,16 +5,17 @@ import {
     StyleSheet,
     ActivityIndicator,
     Pressable,
+    Alert,
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { recipeAPI } from "../../services/api";
+
 import LogoAndName from "../../components/Header/LogoAndName";
 import IngredientsSection from "../../components/RecipePage/IngredientsSection";
 import RecipePageHeader from "../../components/RecipePage/RecipesPageHeader";
 import InstructionsSection from "../../components/RecipePage/InstructionsSection";
 import NotesSection from "../../components/RecipePage/NotesSection";
-import { API_BASE_URL } from "../../constatnts/config";
 
 export default function RecipePage() {
     const router = useRouter();
@@ -43,25 +44,46 @@ export default function RecipePage() {
         }
     };
 
-    const updateField = async (id, field, value) => {
-        const body = {};
-        if (field === "ingredients") {
-            body[field] = value.split("\n").filter((line) => line.trim());
-        } else {
-            body[field] = value;
+    const updateField = async (recipeId, field, value) => {
+        try {
+            console.log("🔄 updateField called:", { recipeId, field, value });
+
+            // Use the API service
+            const updatedRecipe = await recipeAPI.updateRecipe(
+                recipeId,
+                field,
+                value
+            );
+
+            setRecipe(updatedRecipe);
+
+            console.log("✅ Recipe updated successfully");
+            Alert.alert("Success", `${field} updated!`);
+
+            return updatedRecipe;
+        } catch (err) {
+            console.error("❌ Failed to update:", err);
+            Alert.alert("Error", `Failed to update ${field}`);
+            throw err;
         }
+    };
 
-        const res = await fetch(`${API_BASE_URL}/recipes/${id}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(body),
-        });
+    const saveNote = async (note) => {
+        try {
+            const res = await fetch(`/recipes/${id}/notes`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ notes: note }),
+            });
 
-        if (!res.ok) {
-            throw new Error(`Failed to update ${field}`);
+            if (res.ok) {
+                const updated = await res.json();
+                setRecipe(updated);
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Error saving note");
         }
-
-        return res.json();
     };
 
     if (loading) {
@@ -98,9 +120,16 @@ export default function RecipePage() {
                     <Text style={styles.backText}>← Back</Text>
                 </Pressable>
                 <RecipePageHeader recipe={recipe} onUpdate={updateField} />
-                <IngredientsSection ingredients={recipe.ingredients} />
-                <InstructionsSection instructions={recipe.instructions} />
-                <NotesSection notes={recipe.notes} />
+                <IngredientsSection
+                    recipe={recipe}
+                    onUpdate={updateField}
+                    id={id}
+                />
+                <InstructionsSection
+                    instructions={recipe.instructions}
+                    onUpdate={updateField}
+                />
+                <NotesSection notes={recipe.notes} onSave={saveNote} />
             </ScrollView>
         </SafeAreaView>
     );

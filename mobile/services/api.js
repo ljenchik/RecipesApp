@@ -48,8 +48,29 @@ export const recipeAPI = {
         return response.data;
     },
 
-    updateRecipe: async (id, recipeData) => {
-        const response = await api.put(`/recipes/${id}`, recipeData);
+    updateRecipe: async (id, fieldOrData, value) => {
+        console.log("🔄 updateRecipe called:", { id, fieldOrData, value });
+
+        let body;
+
+        if (typeof fieldOrData === "string") {
+            // Single field update
+            body = {};
+            if (fieldOrData === "ingredients") {
+                body[fieldOrData] = value
+                    .split("\n")
+                    .filter((line) => line.trim());
+            } else {
+                body[fieldOrData] = value;
+            }
+        } else {
+            // Full object update
+            body = fieldOrData;
+        }
+
+        console.log("📤 Sending body:", body);
+        const response = await api.put(`/recipes/${id}`, body);
+        console.log("✅ Update response:", response.data);
         return response.data;
     },
 

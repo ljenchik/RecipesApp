@@ -3,6 +3,7 @@ import { Platform } from "react-native";
 
 // Replace with your local IP if you want to test on real devices
 const DEV_IP = "192.168.1.204";
+//const DEV_IP = "192.168.2.59";
 
 export const API_BASE_URL = __DEV__
     ? Platform.OS === "android"

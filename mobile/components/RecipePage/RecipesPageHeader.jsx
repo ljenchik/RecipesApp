@@ -17,7 +17,6 @@ export default function RecipePageHeader({ recipe, onUpdate }) {
     const [title, setTitle] = useState(recipe.title);
     const [isFocused, setIsFocused] = useState(false);
 
-    // Keep local title updated if recipe prop changes
     useEffect(() => {
         setTitle(recipe.title);
     }, [recipe.title]);
@@ -52,8 +51,8 @@ export default function RecipePageHeader({ recipe, onUpdate }) {
                         autoFocus
                         onFocus={() => setIsFocused(true)}
                         onBlur={() => setIsFocused(false)}
-                        selectionColor="#FF6B6B" // changes cursor color
-                        underlineColorAndroid="transparent" // removes default underline on Android
+                        selectionColor="#FF6B6B"
+                        underlineColorAndroid="transparent"
                     />
 
                     <Pressable style={styles.button} onPress={handleUpdate}>
